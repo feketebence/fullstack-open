@@ -4,4 +4,4 @@ Sandbox for [Full stack open course](https://fullstackopen.com/en/) by Universit
 
 ## Progress
 
-currently at: https://fullstackopen.com/en/part1/component_state_event_handlers
+currently at: https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps
