@@ -28,7 +28,6 @@ const Total = ({ parts }) => {
     const totalExerciseCount = parts
         .map((part) => part.exercises)
         .reduce((sum, value) => sum + value, 0);
-    console.log('totalExerciseCount:', totalExerciseCount);
 
     return <h4>Number of exercises: {totalExerciseCount}</h4>;
 };
@@ -93,7 +92,7 @@ const App = () => {
     return (
         <>
             {courses.map((course) => (
-                <Course course={course} />
+                <Course key={course.id} course={course} />
             ))}
         </>
     );
