@@ -7,6 +7,8 @@ const Button = ({ onClick, text }) => {
 const Statistics = ({ good, neutral, bad }) => {
     const all = good + neutral + bad;
     const avg = (good - bad) / all;
+    const positivePercentage = good / all;
+
     return (
         <div>
             <h1>Statistics</h1>
@@ -15,8 +17,9 @@ const Statistics = ({ good, neutral, bad }) => {
             bad: {bad} <br />
             <br />
             all: {all} <br />
-            average: {avg} <br />
-            positive: {good / all} %
+            average: {isNaN(avg) ? '-' : avg} <br />
+            positive:{' '}
+            {isNaN(positivePercentage) ? '-' : positivePercentage + ' %'}
         </div>
     );
 };
