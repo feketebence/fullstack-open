@@ -9,8 +9,8 @@ const App = () => {
     const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
-        noteService.getAll().then((response) => {
-            setNotes(response.data);
+        noteService.getAll().then((initialNotes) => {
+            setNotes(initialNotes);
         });
     }, []);
 
@@ -22,8 +22,8 @@ const App = () => {
             important: Math.random() < 0.5
         };
 
-        noteService.create(newNoteObject).then((response) => {
-            setNotes(notes.concat(response.data));
+        noteService.create(newNoteObject).then((createdNote) => {
+            setNotes(notes.concat(createdNote));
             setNewNote('');
         });
     };
@@ -39,9 +39,9 @@ const App = () => {
             important: !note.important
         };
 
-        noteService.update(id, changedNote).then((response) => {
+        noteService.update(id, changedNote).then((updatedNote) => {
             const nextNotes = notes.map((note) =>
-                note.id === id ? response.data : note
+                note.id === id ? updatedNote : note
             );
             setNotes(nextNotes);
         });
