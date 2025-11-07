@@ -21,12 +21,16 @@ const App = () => {
 
         const newNoteObject = {
             content: newNote,
-            important: Math.random() < 0.5,
-            id: String(notes.length + 1)
+            important: Math.random() < 0.5
         };
 
-        setNotes(notes.concat(newNoteObject));
-        setNewNote('');
+        axios
+            .post('http://localhost:3001/notes', newNoteObject)
+            .then((response) => {
+                console.log('Response from server to POST /notes:', response);
+                setNotes(notes.concat(response.data));
+                setNewNote('');
+            });
     };
 
     const handleNoteChange = (event) => {
