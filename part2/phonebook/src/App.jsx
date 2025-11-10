@@ -3,19 +3,33 @@ import { useState } from 'react';
 
 import personService from './services/personService';
 
-const Entries = ({ persons, filterText }) => {
-    const personsToShow = persons.filter((person) =>
-        person.name.toUpperCase().includes(filterText.toUpperCase())
+const Person = ({ name, phoneNumber, onDelete }) => {
+    return (
+        <li>
+            {name} {phoneNumber} <button onClick={onDelete}>Delete</button>
+        </li>
     );
+};
+
+const PersonList = ({ persons, searchText, handlePersonDelete }) => {
+    console.log('persons:', persons);
+
+    const personsToShow = persons.filter((p) => {
+        console.log('(inside personList filter) p:', p);
+        return p.name.toUpperCase().includes(searchText.toUpperCase());
+    });
 
     return (
         <>
             <h2>Numbers</h2>
             <ol>
                 {personsToShow.map((person) => (
-                    <li key={person.name}>
-                        {person.name} {person.number}
-                    </li>
+                    <Person
+                        key={person.id}
+                        name={person.name}
+                        phoneNumber={person.number}
+                        onDelete={() => handlePersonDelete(person.id)}
+                    />
                 ))}
             </ol>
         </>
@@ -102,6 +116,18 @@ const App = () => {
         }
     };
 
+    const handlePersonDelete = (id) => {
+        const personToDelete = persons.find((person) => person.id === id);
+
+        if (window.confirm(`Delete ${personToDelete.name}?`)) {
+            const nextPersons = persons.filter((person) => person.id !== id);
+
+            personService.deletePerson(id).then(() => {
+                setPersons(nextPersons);
+            });
+        }
+    };
+
     return (
         <div>
             <h2>Phone book</h2>
@@ -116,7 +142,11 @@ const App = () => {
                 onNumberChange={handleNewNumberChange}
                 onSubmit={handleAddPerson}
             />
-            <Entries persons={persons} filterText={searchText} />
+            <PersonList
+                persons={persons}
+                searchText={searchText}
+                handlePersonDelete={handlePersonDelete}
+            />
         </div>
     );
 };
