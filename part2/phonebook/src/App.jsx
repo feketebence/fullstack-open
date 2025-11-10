@@ -81,10 +81,7 @@ const App = () => {
     const handleAddPerson = (event) => {
         event.preventDefault();
 
-        const nextPersonId = Math.max(...persons.map((p) => p.id)) + 1;
-
         const newPerson = {
-            id: nextPersonId,
             name: newName,
             number: newNumber
         };
@@ -95,13 +92,18 @@ const App = () => {
                 : true;
 
         if (personAlreadyAdded) {
-            alert(`${newPerson.name} is already added to the phonebook.`);
+            alert(`${newPerson.name} is already added to the phone book.`);
         } else {
-            setPersons(persons.concat(newPerson));
+            axios
+                .post('http://localhost:3001/persons', newPerson)
+                .then((response) => {
+                    console.log('response:', response);
+                    const createdPerson = response.data;
+                    setPersons(persons.concat(createdPerson));
+                });
+            setNewName('');
+            setNewNumber('');
         }
-
-        setNewName('');
-        setNewNumber('');
     };
 
     return (
