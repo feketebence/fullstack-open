@@ -103,7 +103,41 @@ const App = () => {
                 : true;
 
         if (personAlreadyAdded) {
-            alert(`${newPerson.name} is already added to the phone book.`);
+            const isUpdateConfirmed = window.confirm(
+                `${newPerson.name} is already added. Replace the old number with the new one?`
+            );
+            if (isUpdateConfirmed) {
+                const existingPerson = persons.filter(
+                    (p) => p.name === newPerson.name
+                )[0];
+
+                personService
+                    .update(existingPerson.id, newPerson)
+                    .then((updatedPerson) => {
+                        const nextPersons = persons.map((person) =>
+                            person.id === updatedPerson.id
+                                ? updatedPerson
+                                : person
+                        );
+                        setPersons(nextPersons);
+                    })
+                    .catch((error) => {
+                        alert(
+                            `${existingPerson.name} was already deleted from the server.`
+                        );
+                        console.log(
+                            `Person with id: ${existingPerson.id}, name: ${existingPerson.name}, phoneNumber: ${existingPerson.number} was not found on the server.`,
+                            error
+                        );
+
+                        const nextPersons = persons.filter(
+                            (person) => person.id !== existingPerson.id
+                        );
+                        setPersons(nextPersons);
+                    });
+            } else {
+                alert(`${newPerson.name} is already added to the phone book.`);
+            }
         } else {
             personService.create(newPerson).then((createdPerson) => {
                 setPersons(persons.concat(createdPerson));
