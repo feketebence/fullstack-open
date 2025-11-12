@@ -5,6 +5,10 @@ GET http://localhost:3001/api/notes
 GET http://localhost:3001/api/notes/6
 
 ###
+GET http://localhost:3001/api/nonexistent
+
+
+###
 
 POST http://localhost:3001/api/notes
 content-type: application/json
