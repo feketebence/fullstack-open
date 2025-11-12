@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const crypto = require('crypto');
 
 let persons = [
     {
@@ -24,10 +25,17 @@ let persons = [
     }
 ];
 
+const assignRequestId = (request, response, next) => {
+    request.id = crypto.randomUUID();
+    next();
+};
+morgan.token('id', (request) => request.id);
+morgan.token('body', (request) => JSON.stringify(request.body));
+
 const app = express();
 app.use(express.json());
-
-app.use(morgan('tiny'));
+app.use(assignRequestId);
+app.use(morgan(':id :method :url :response-time ms, request body: :body'));
 
 const generateId = () => {
     const id = Math.ceil(Math.random() * 100_000);
