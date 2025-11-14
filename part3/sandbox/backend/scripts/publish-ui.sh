@@ -30,7 +30,7 @@ error() {
 git rev-parse --is-inside-work-tree > /dev/null 2>&1 \
   || error "This script must be run inside a Git repository."
 
-# Ensure dist directory exists
+# Ensure target directory (with the built artifacts) exists
 if [ ! -d "$DIST_DIR" ]; then
     error "Directory '$DIST_DIR' does not exist. Did the UI build step fail?"
 fi
@@ -40,21 +40,36 @@ if ! git remote get-url origin > /dev/null 2>&1; then
     error "No 'origin' remote found. Cannot push."
 fi
 
+# Ensure local and remote repository are in sync
+LOCAL_HASH=$(git rev-parse HEAD)       || error "Failed to read local HEAD"
+REMOTE_HASH=$(git rev-parse @{u})      || error "Failed to read remote HEAD"
 
-# --- Check for changes in dist ----------------------------------------------
+if [ "$LOCAL_HASH" != "$REMOTE_HASH" ]; then
+    error "Local and remote are out of sync. 
+    Local hash: $LOCAL_HASH 
+    Remote hash: $REMOTE_HASH 
+    
+    Synchronize your local repository with remote before publishing UI build."
+fi
 
+# Ensure HEAD has an upstream branch
+if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+    error "Current branch has no upstream. Cannot determine whether commits are safe to push."
+fi
+
+# --- Check for changes in target directory ---
 changes_to_add=$(git ls-files -z --others --modified --exclude-standard "$DIST_DIR" || true)
 
 if [ -z "$changes_to_add" ]; then
-    log "No files to stage. Exiting."
+    log "No files to stage in target directory: '$DIST_DIR'. Exiting."
     exit 0
 fi
 
-log "Files 'git add' will stage from '$DIST_DIR':"
+log "Files to stage from '$DIST_DIR':"
 echo "$changes_to_add" | sed 's/^/    /'
 
 
-# --- Staging (robust, NUL-safe, keeps going on per-file failures) -------------
+# --- Staging (robust, NUL-safe, keeps going on per-file failures) ---
 changed_file_count=0
 failed_files=()
 
@@ -90,8 +105,7 @@ log "Staged $changed_file_count files."
 echo
 
 
-# --- Verify staged changes ---------------------------------------------------
-
+# --- Verify staged changes ---
 staged_changes=$(git diff --name-only --cached || error "Failed to use git diff --cached")
 
 if [ -z "$staged_changes" ]; then
@@ -103,72 +117,19 @@ echo "$staged_changes" | sed 's/^/    /'
 echo
 
 
-# --- Commit ------------------------------------------------------------------
-
-LOCAL_HASH=$(git rev-parse HEAD)       || error "Failed to read local HEAD"
-REMOTE_HASH=$(git rev-parse @{u})      || error "Failed to read remote HEAD"
-
+# --- Commit ---
 commit_message="ui-build-$(date --utc +%Y-%m-%dT%H-%M-%SZ)"
 
 log "Committing changes..."
 git commit -m "$commit_message" || error "git commit failed."
 
-# Save the commit hash so we can undo it later if needed
 SCRIPT_COMMIT_HASH=$(git rev-parse HEAD)
-
 log "Committed $changed_file_count changes with message: '$commit_message'"
+log "Commit hash: $SCRIPT_COMMIT_HASH"
 echo
 
 
-# --- Push --------------------------------------------------------------------
-log "Validating no unpushed commits exist..."
-
-# Make sure HEAD has an upstream branch
-if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
-    error "Current branch has no upstream. Cannot determine whether commits are safe to push."
-fi
-
-# --- Validate no unpushed commits exist --------------------------------------
-
-if [ "$LOCAL_HASH" != "$REMOTE_HASH" ]; then
-    echo >&2 "[ERROR] Unpushed commits exist on the local branch."
-    echo >&2 "        This script will not push unrelated commits."
-    echo >&2 ""
-
-    # --- Cleanup: remove the script-created commit ---------------------------
-
-    if [ -z "${SCRIPT_COMMIT_HASH:-}" ]; then
-        echo >&2 "[ERROR] SCRIPT_COMMIT_HASH is empty — cannot safely clean up."
-        exit 1
-    fi
-
-    LAST_COMMIT_MSG=$(git log -1 --pretty=%B 2>/dev/null || echo "")
-
-    echo >&2 "[INFO] Last commit message was:"
-    echo >&2 "       $LAST_COMMIT_MSG"
-    echo >&2 ""
-
-    # Optional Safety Enhancement:
-    # Ensure the last commit was created by THIS script (matches ui-build-*)
-    if [[ "$LAST_COMMIT_MSG" == ui-build-* ]]; then
-        echo >&2 "[INFO] Rolling back script-created commit: $SCRIPT_COMMIT_HASH"
-
-        git reset --hard "${SCRIPT_COMMIT_HASH}^" \
-            || error "Failed to remove script-created commit."
-    else
-        echo >&2 "[ERROR] The last commit does NOT look like a ui-build commit."
-        echo >&2 "        Refusing to run 'git reset --hard'."
-        echo >&2 "        Manual cleanup required."
-        exit 1
-    fi
-
-    echo >&2 "[INFO] Cleanup complete — script-created commit removed."
-    exit 1
-fi
-
-
-log "Branch is up-to-date. Safe to push."
-
+# --- Push ---
 log "Pushing to origin..."
 git push origin HEAD \
   || error "git push failed."
