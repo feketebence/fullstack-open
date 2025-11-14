@@ -15,7 +15,6 @@
         "build-publish:ui": "npm run build:ui && npm run publish:ui"
     },
     "dependencies": {
-        "cors": "^2.8.5",
         "express": "^5.1.0"
     }
 }

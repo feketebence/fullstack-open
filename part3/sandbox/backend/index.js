@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 
 let notes = [
     {
@@ -36,7 +35,6 @@ const requestLoggerMiddleware = (request, response, next) => {
 };
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(requestLoggerMiddleware);
 app.use(express.static('dist'));
