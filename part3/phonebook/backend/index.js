@@ -99,6 +99,12 @@ app.post('/api/persons', (request, response) => {
     response.json(newPerson);
 });
 
+app.put('/api/persons/:id', (request, response) => {
+    const message = `${request.method} ${request.path} endpoint is not implemented`;
+    console.log(message);
+    response.status(501).send({ error: `message` });
+});
+
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id;
     const person = persons.find((p) => p.id === id);
@@ -111,7 +117,13 @@ app.delete('/api/persons/:id', (request, response) => {
     }
 });
 
-const PORT = 3001;
+// this has to be after the endpoint definitions
+const unknownEndpointMiddleware = (request, response) => {
+    response.status(404).send({ error: `unknown endpoint: ${request.path}` });
+};
+app.use(unknownEndpointMiddleware);
+
+const PORT = process.env.port || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
