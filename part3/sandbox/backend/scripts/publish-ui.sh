@@ -106,6 +106,9 @@ echo
 
 # --- Commit ------------------------------------------------------------------
 
+LOCAL_HASH=$(git rev-parse HEAD)       || error "Failed to read local HEAD"
+REMOTE_HASH=$(git rev-parse @{u})      || error "Failed to read remote HEAD"
+
 commit_message="ui-build-$(date --utc +%Y-%m-%dT%H-%M-%SZ)"
 
 log "Committing changes..."
@@ -125,9 +128,6 @@ log "Validating no unpushed commits exist..."
 if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
     error "Current branch has no upstream. Cannot determine whether commits are safe to push."
 fi
-
-LOCAL_HASH=$(git rev-parse HEAD)       || error "Failed to read local HEAD"
-REMOTE_HASH=$(git rev-parse @{u})      || error "Failed to read remote HEAD"
 
 # --- Validate no unpushed commits exist --------------------------------------
 
