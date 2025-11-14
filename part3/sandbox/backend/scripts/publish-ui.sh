@@ -21,7 +21,6 @@ log() {
 
 error() {
     echo -e "[ERROR] $1" >&2
-    echo "error"
     exit 1
 }
 
