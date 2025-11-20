@@ -4,24 +4,6 @@ const express = require('express');
 
 const Note = require('./models/note');
 
-let notes = [
-    {
-        id: '1',
-        content: 'HTML is easy',
-        important: true
-    },
-    {
-        id: '2',
-        content: 'Browser can execute only JavaScript',
-        important: false
-    },
-    {
-        id: '3',
-        content: 'GET and POST are the most important methods of HTTP protocol',
-        important: true
-    }
-];
-
 const app = express();
 app.use(express.static('dist'));
 app.use(express.json());
@@ -54,8 +36,7 @@ app.get('/api/notes', (request, response) => {
 });
 
 app.get('/api/notes/:id', (request, response, next) => {
-    const id = request.params.id;
-    const note = Note.findById(id)
+    Note.findById(request.params.id)
         .then((note) => {
             if (note) {
                 response.json(note);
@@ -66,11 +47,12 @@ app.get('/api/notes/:id', (request, response, next) => {
         .catch((error) => next(error));
 });
 
-app.delete('/api/notes/:id', (request, response) => {
-    const id = request.params.id;
-    notes = notes.filter((note) => note.id !== id);
-
-    response.status(204).end();
+app.delete('/api/notes/:id', (request, response, next) => {
+    Note.findByIdAndDelete(request.params.id)
+        .then((result) => {
+            response.status(204).end();
+        })
+        .catch((error) => next(error));
 });
 
 app.post('/api/notes', (request, response) => {
@@ -92,42 +74,30 @@ app.post('/api/notes', (request, response) => {
     });
 });
 
-app.put('/api/notes/:id', (request, response) => {
-    // todo: fix this endpoint
-    const id = request.params.id;
+app.put('/api/notes/:id', (request, response, next) => {
+    const { content, important } = request.body;
 
-    const note = notes.find((note) => note.id === id);
+    Note.findById(request.params.id)
+        .then((note) => {
+            if (!note) {
+                return response.status(404).end();
+            }
 
-    if (note) {
-        const body = request.body;
-        if (!body.content) {
-            return response.status(400).json({
-                error: '"content" field of the request body is empty'
+            note.content = content;
+            note.important = important;
+
+            return note.save().then((updatedNote) => {
+                response.json(updatedNote);
             });
-        }
-
-        const updatedNote = {
-            id: note.id,
-            important: body.important || false,
-            content: body.content
-        };
-
-        console.log('updatedNote:', updatedNote);
-
-        notes = notes.filter((n) => n.id !== id);
-        notes = notes.concat(updatedNote);
-
-        response.json(note);
-    } else {
-        response.status(404).end();
-    }
+        })
+        .catch((error) => next(error));
 });
 
-const unknownEndpointMiddleware = (request, response) => {
+const unknownEndpointHandler = (request, response) => {
     response.status(404).send({ error: `unknown endpoint: ${request.path}` });
 };
 
-app.use(unknownEndpointMiddleware);
+app.use(unknownEndpointHandler);
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message);

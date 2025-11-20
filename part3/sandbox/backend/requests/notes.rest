@@ -15,8 +15,7 @@ GET http://localhost:3001/api/notes/someInvalidId
 GET http://localhost:3001/api/nonexistent
 
 
-###
-
+### Create a new note
 POST http://localhost:3001/api/notes
 content-type: application/json
 
@@ -25,6 +24,14 @@ content-type: application/json
     "important": false
 }
 
-###
+### Update a note
+PUT http://localhost:3001/api/notes/691b107121fbabb546551043
+content-type: application/json
 
-DELETE http://localhost:3001/api/notes/1
+{
+    "content": "Soak in the sun.",
+    "important": true
+}
+
+### Delete a specific note
+DELETE http://localhost:3001/api/notes/691c4625506cf3fc085bc332
