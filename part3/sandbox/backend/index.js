@@ -56,9 +56,23 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (request, response) => {
     const id = request.params.id;
-    const note = Note.findById(id).then((note) => {
-        response.json(note);
-    });
+    const note = Note.findById(id)
+        .then((note) => {
+            if (note) {
+                response.json(note);
+            } else {
+                response.status(404).end();
+            }
+        })
+        .catch((error) => {
+            console.log(
+                `Error occurred during fetching note with id: "${id}"`,
+                error
+            );
+            response.status(400).send({
+                error: `malformatted id: ${id}`
+            });
+        });
 });
 
 app.delete('/api/notes/:id', (request, response) => {

@@ -1,10 +1,17 @@
+### Get all notes
 GET http://localhost:3001/api/notes
 
-###
+### Get specific note
+GET http://localhost:3001/api/notes/691afabfbb3c21841bfab098
 
-GET http://localhost:3001/api/notes/6
+### Get non-existent note
+GET http://localhost:3001/api/notes/691afabfbb3c21841bfab099
 
-###
+### Get for invalid id => 400 error
+GET http://localhost:3001/api/notes/someInvalidId
+
+
+### Get for non-existent endpoint
 GET http://localhost:3001/api/nonexistent
 
 
