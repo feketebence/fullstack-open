@@ -4,7 +4,7 @@ Sandbox for [Full stack open course](https://fullstackopen.com/en/) by Universit
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part3/validation_and_es_lint#lint
+Currently at: https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing#project-structure
 
 todo:
 

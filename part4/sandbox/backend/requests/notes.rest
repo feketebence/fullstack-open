@@ -1,0 +1,37 @@
+### Get all notes
+GET http://localhost:3001/api/notes
+
+### Get specific note
+GET http://localhost:3001/api/notes/691afabfbb3c21841bfab098
+
+### Get non-existent note
+GET http://localhost:3001/api/notes/691afabfbb3c21841bfab099
+
+### Get for invalid id => 400 error
+GET http://localhost:3001/api/notes/someInvalidId
+
+
+### Get for non-existent endpoint
+GET http://localhost:3001/api/nonexistent
+
+
+### Create a new note
+POST http://localhost:3001/api/notes
+content-type: application/json
+
+{
+    "content": "Progress with the tutorials.",
+    "important": false
+}
+
+### Update a note
+PUT http://localhost:3001/api/notes/691b107121fbabb546551043
+content-type: application/json
+
+{
+    "content": "Soak in the sun.",
+    "important": true
+}
+
+### Delete a specific note
+DELETE http://localhost:3001/api/notes/691c620f978a394d2c394ba5
