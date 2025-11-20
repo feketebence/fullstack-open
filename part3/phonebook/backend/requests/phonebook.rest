@@ -1,15 +1,13 @@
+### Get all the people
 GET http://localhost:3001/api/persons
 
-###
+### Get specific person
+GET http://localhost:3001/api/persons/691b234f6f664bd418d527f5
 
-GET http://localhost:3001/api/persons/84311
+### Delete specific person
+DELETE http://localhost:3001/api/persons/691b24885aa9c152eca5e7c2
 
-###
-
-DELETE http://localhost:3001/api/persons/10
-
-###
-
+### Create new person
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
@@ -17,3 +15,15 @@ Content-Type: application/json
     "name": "Someone else",
     "number": "1234-242"
 }
+
+### Update specific person
+PUT http://localhost:3001/api/persons/691b234f6f664bd418d527f5
+Content-Type: application/json
+
+{
+    "name": "updated person",
+    "number": "1-800-UPDATE"
+}
+
+### Get data from info endpoint
+GET http://localhost:3001/info

@@ -6,29 +6,6 @@ const crypto = require('crypto');
 
 const Person = require('./models/person');
 
-let persons = [
-    {
-        id: '1',
-        name: 'Arto Hellas',
-        number: '040-123456'
-    },
-    {
-        id: '2',
-        name: 'Ada Lovelace',
-        number: '39-44-5323523'
-    },
-    {
-        id: '3',
-        name: 'Dan Abramov',
-        number: '12-43-234345'
-    },
-    {
-        id: '4',
-        name: 'Mary Poppendieck',
-        number: '39-23-6423122'
-    }
-];
-
 const assignRequestId = (request, response, next) => {
     request.id = crypto.randomUUID();
     next();
@@ -48,33 +25,30 @@ app.get('/api/persons', (request, response) => {
     });
 });
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    const person = Person.findById(id)
+app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id)
         .then((person) => {
-            if (person === null) {
+            if (!person) {
                 return response.status(404).end();
             } else {
                 return response.json(person);
             }
         })
-        .catch((error) => {
-            console.log(
-                `Error occurred during fetching person with id: ${id}`,
-                error
-            );
-            response.status(500).end();
-        });
+        .catch((error) => next(error));
 });
 
-app.get('/info', (request, response) => {
-    response.send(`
-        Phonebook has info for ${persons.length} ${
-        persons.length > 1 ? 'people' : 'person'
-    }.
+app.get('/info', (request, response, next) => {
+    Person.find({})
+        .then((people) => {
+            response.send(`
+        Phonebook has info for ${people.length} ${
+                people.length > 1 ? 'people' : 'person'
+            }.
     <br />
     ${new Date().toISOString()}
-        `);
+    `);
+        })
+        .catch((error) => next(error));
 });
 
 app.post('/api/persons', (request, response) => {
@@ -92,39 +66,50 @@ app.post('/api/persons', (request, response) => {
         });
     }
 
-    personWithSameName = persons.find((p) => p.name === body.name);
-    if (personWithSameName) {
-        return response.status(400).json({
-            error: `Person with name '${body.name}' already exists.`
+    Person.find({}).then((people) => {
+        personWithSameName = people.find((p) => p.name === body.name);
+        if (personWithSameName) {
+            return response.status(400).json({
+                error: `Person with name '${body.name}' already exists.`
+            });
+        }
+
+        const newPerson = new Person({
+            name: body.name,
+            number: body.number
         });
-    }
 
-    const newPerson = new Person({
-        name: body.name,
-        number: body.number
-    });
-
-    newPerson.save().then((savedPerson) => {
-        response.json(savedPerson);
+        newPerson.save().then((savedPerson) => {
+            response.json(savedPerson);
+        });
     });
 });
 
 app.put('/api/persons/:id', (request, response) => {
-    const message = `${request.method} ${request.path} endpoint is not implemented`;
-    console.log(message);
-    response.status(501).send({ error: `message` });
+    const { name, number } = request.body;
+
+    Person.findById(request.params.id)
+        .then((person) => {
+            if (!person) {
+                return response.status(404).end();
+            }
+
+            person.name = name;
+            person.number = number;
+
+            return person.save().then((updatedPerson) => {
+                response.json(updatedPerson);
+            });
+        })
+        .catch((error) => next(error));
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    const person = persons.find((p) => p.id === id);
-
-    if (person) {
-        persons = persons.filter((p) => p.id !== person.id);
-        response.status(204).end();
-    } else {
-        response.status(404).end();
-    }
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndDelete(request.params.id)
+        .then((result) => {
+            response.status(204).end();
+        })
+        .catch((error) => next(error));
 });
 
 // this has to be after the endpoint definitions
@@ -133,7 +118,24 @@ const unknownEndpointMiddleware = (request, response) => {
 };
 app.use(unknownEndpointMiddleware);
 
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({
+            error: `malformed id`
+        });
+    }
+
+    next(error);
+};
+
+// this has to be the last loaded middleware
+// also all the routes should be registered before this
+app.use(errorHandler);
+
 const PORT = process.env.port || 3001;
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
