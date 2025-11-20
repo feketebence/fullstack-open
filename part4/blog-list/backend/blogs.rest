@@ -36,5 +36,5 @@ Content-Type: application/json
     "title": "go-to statement considered mega harmful",
     "author": "somebody else than Dijkstra",
     "url": "http://url.io",
-    "likes": 1234
+    "likes": 53
 }
