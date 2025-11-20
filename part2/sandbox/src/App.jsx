@@ -39,12 +39,23 @@ const App = () => {
             important: !note.important
         };
 
-        noteService.update(id, changedNote).then((updatedNote) => {
-            const nextNotes = notes.map((note) =>
-                note.id === id ? updatedNote : note
-            );
-            setNotes(nextNotes);
-        });
+        noteService
+            .update(id, changedNote)
+            .then((updatedNote) => {
+                const nextNotes = notes.map((note) =>
+                    note.id === id ? updatedNote : note
+                );
+                setNotes(nextNotes);
+            })
+            .catch((error) => {
+                alert(
+                    `The note '${note.content}' was already deleted from the server`
+                );
+                console.log(error);
+
+                const nextNotes = notes.filter((n) => n.id !== id);
+                setNotes(nextNotes);
+            });
     };
 
     const notesToShow = showAll
