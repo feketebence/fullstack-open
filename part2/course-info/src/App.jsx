@@ -25,11 +25,12 @@ const Content = ({ parts }) => {
 };
 
 const Total = ({ parts }) => {
-    let totalNumberOfExercises = 0;
-    parts.forEach((part) => {
-        totalNumberOfExercises += part.exercises;
-    });
-    return <h4>Number of exercises: {totalNumberOfExercises}</h4>;
+    const totalExerciseCount = parts
+        .map((part) => part.exercises)
+        .reduce((sum, value) => sum + value, 0);
+    console.log('totalExerciseCount:', totalExerciseCount);
+
+    return <h4>Number of exercises: {totalExerciseCount}</h4>;
 };
 
 const Course = ({ course }) => {
@@ -61,6 +62,11 @@ const App = () => {
                 name: 'State of a component',
                 exercises: 14,
                 id: 3
+            },
+            {
+                name: 'Redux',
+                exercises: 11,
+                id: 4
             }
         ]
     };
