@@ -4,6 +4,14 @@ const Button = ({ onClick, text }) => {
     return <button onClick={onClick}>{text}</button>;
 };
 
+const StatisticsLine = ({ text, value }) => {
+    return (
+        <>
+            {text}: {value} <br />
+        </>
+    );
+};
+
 const Statistics = ({ good, neutral, bad }) => {
     const all = good + neutral + bad;
     const avg = (good - bad) / all;
@@ -21,14 +29,13 @@ const Statistics = ({ good, neutral, bad }) => {
     return (
         <div>
             <h1>Statistics</h1>
-            good: {good} <br />
-            neutral: {neutral} <br />
-            bad: {bad} <br />
+            <StatisticsLine text="good" value={good} />
+            <StatisticsLine text="neutral" value={neutral} />
+            <StatisticsLine text="bad" value={bad} />
             <br />
-            all: {all} <br />
-            average: {isNaN(avg) ? '-' : avg} <br />
-            positive:{' '}
-            {isNaN(positivePercentage) ? '-' : positivePercentage + ' %'}
+            <StatisticsLine text="all" value={all} />
+            <StatisticsLine text="average" value={avg} />
+            <StatisticsLine text="positive" value={positivePercentage + ' %'} />
         </div>
     );
 };
