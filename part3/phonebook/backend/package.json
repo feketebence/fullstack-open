@@ -10,6 +10,7 @@
         "start": "node index.js",
         "dev": "node --watch index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint .",
         "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
         "publish:ui": "./scripts/publish-ui.sh",
         "build-publish:ui": "npm run build:ui && npm run publish:ui"
@@ -19,5 +20,11 @@
         "express": "^5.1.0",
         "mongoose": "^8.19.4",
         "morgan": "^1.10.1"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@stylistic/eslint-plugin": "^5.6.0",
+        "eslint": "^9.39.1",
+        "globals": "^16.5.0"
     }
 }
