@@ -39,6 +39,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(requestLoggerMiddleware);
+app.use(express.static('dist'));
 
 const generateId = () => {
     const maxId =
