@@ -8,13 +8,10 @@ const App = () => {
     const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
-        console.log('effect');
         axios.get('http://localhost:3001/notes').then((response) => {
-            console.log('promise fulfilled');
             setNotes(response.data);
         });
     }, []);
-    console.log(`Rendering ${notes.length} notes.`);
 
     const handleAddNote = (event) => {
         event.preventDefault();
@@ -37,6 +34,22 @@ const App = () => {
         setNewNote(event.target.value);
     };
 
+    const toggleImportanceOf = (id) => {
+        const url = `http://localhost:3001/notes/${id}`;
+        const note = notes.find((n) => n.id === id);
+        const changedNote = {
+            ...note,
+            important: !note.important
+        };
+
+        axios.put(url, changedNote).then((response) => {
+            const nextNotes = notes.map((note) =>
+                note.id === id ? response.data : note
+            );
+            setNotes(nextNotes);
+        });
+    };
+
     const notesToShow = showAll
         ? notes
         : notes.filter((note) => note.important === true);
@@ -52,7 +65,11 @@ const App = () => {
             </div>
             <ul>
                 {notesToShow.map((note) => (
-                    <Note key={note.id} note={note} />
+                    <Note
+                        key={note.id}
+                        note={note}
+                        toggleImportance={() => toggleImportanceOf(note.id)}
+                    />
                 ))}
             </ul>
 
