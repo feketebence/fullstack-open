@@ -1,49 +1,25 @@
 import { useState } from 'react';
 
-const History = ({ allClicks }) => {
-    if (allClicks.length === 0) {
-        return <div>the app is used by clicking on the buttons</div>;
-    }
+const Display = ({ text }) => <h1>{text}</h1>;
 
-    return <div>button press history: {allClicks.join(' ')}</div>;
+const Button = ({ onClick, text }) => {
+    return <button onClick={onClick}>{text}</button>;
 };
 
-const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
-
 const App = () => {
-    const [left, setLeft] = useState(0);
-    const [right, setRight] = useState(0);
+    const [value, setValue] = useState(10);
 
-    const [allClicks, setAll] = useState([]);
-    const [total, setTotal] = useState(0);
-
-    const handleLeftClick = () => {
-        setAll(allClicks.concat('L'));
-
-        const updatedLeft = left + 1;
-
-        setLeft(updatedLeft);
-        setTotal(updatedLeft + right);
-    };
-
-    const handleRightClick = () => {
-        setAll(allClicks.concat('R'));
-
-        const updatedRight = right + 1;
-
-        setRight(updatedRight);
-        setTotal(left + updatedRight);
+    const setToValue = (newValue) => {
+        console.log('value changes from', value, 'to: ', newValue);
+        setValue(newValue);
     };
 
     return (
         <div>
-            {left}
-            <Button onClick={handleLeftClick} text="left" />
-            <Button onClick={handleRightClick} text="right" />
-            {right}
-
-            <History allClicks={allClicks} />
-            <p>total: {total}</p>
+            <Display text={value} />
+            <Button onClick={() => setToValue(0)} text="reset to zero" />
+            <Button onClick={() => setToValue(10)} text="set to 10" />
+            <Button onClick={() => setToValue(value + 1)} text="increment" />
         </div>
     );
 };
