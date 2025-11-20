@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 let notes = [
     {
@@ -35,6 +36,7 @@ const requestLoggerMiddleware = (request, response, next) => {
 };
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(requestLoggerMiddleware);
 
@@ -90,6 +92,37 @@ app.post('/api/notes', (request, response) => {
     notes = notes.concat(note);
 
     response.json(note);
+});
+
+app.put('/api/notes/:id', (request, response) => {
+    // todo: fix this endpoint
+    const id = request.params.id;
+
+    const note = notes.find((note) => note.id === id);
+
+    if (note) {
+        const body = request.body;
+        if (!body.content) {
+            return response.status(400).json({
+                error: '"content" field of the request body is empty'
+            });
+        }
+
+        const updatedNote = {
+            id: note.id,
+            important: body.important || false,
+            content: body.content
+        };
+
+        console.log('updatedNote:', updatedNote);
+
+        notes = notes.filter((n) => n.id !== id);
+        notes = notes.concat(updatedNote);
+
+        response.json(note);
+    } else {
+        response.status(404).end();
+    }
 });
 
 const unknownEndpointMiddleware = (request, response) => {
