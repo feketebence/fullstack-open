@@ -67,6 +67,8 @@ const App = () => {
                         }, 3000);
                     })
                     .catch((error) => {
+                        console.log('error:', error);
+
                         console.log(
                             `Person with id: ${existingPerson.id}, name: ${existingPerson.name}, phoneNumber: ${existingPerson.number} was not found on the server.`,
                             error
@@ -88,13 +90,26 @@ const App = () => {
                 alert(`${newPerson.name} is already added to the phone book.`);
             }
         } else {
-            personService.create(newPerson).then((createdPerson) => {
-                setPersons(persons.concat(createdPerson));
-                setSuccessMessage(`Person "${newPerson.name}" added.`);
-                setTimeout(() => {
-                    setSuccessMessage(null);
-                }, 3000);
-            });
+            personService
+                .create(newPerson)
+                .then((createdPerson) => {
+                    setPersons(persons.concat(createdPerson));
+                    setSuccessMessage(`Person "${newPerson.name}" added.`);
+                    setTimeout(() => {
+                        setSuccessMessage(null);
+                    }, 3000);
+                })
+                .catch((error) => {
+                    console.log(
+                        'error from backend: ',
+                        error.response.data.error
+                    );
+
+                    setErrorMessage(error.response.data.error);
+                    setTimeout(() => {
+                        setErrorMessage(null);
+                    }, 5000);
+                });
             setNewName('');
             setNewNumber('');
         }

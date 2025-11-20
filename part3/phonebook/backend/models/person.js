@@ -15,9 +15,28 @@ mongoose
     });
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
+    name: {
+        type: String,
+        minLength: 3,
+        maxLength: 50,
+        required: true
+    },
+    number: {
+        type: String,
+        validate: {
+            validator: (value) => {
+                return /^\d{2,3}-\d*$/.test(value);
+            },
+            message: (props) =>
+                `'${props.value}' is not a valid phone number. It should be formed of two parts that are separated by '-'. The first part has two or three numbers and the second part also consists of numbers. E.g: 09-1234556 or 040-22334455`
+        },
+        required: [true, 'User phone number is required']
+    }
 });
+
+// Enable validation on all update operations
+personSchema.set('runValidators', true);
+personSchema.set('context', 'query');
 
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
