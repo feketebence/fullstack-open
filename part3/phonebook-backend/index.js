@@ -71,6 +71,13 @@ app.post('/api/persons', (request, response) => {
         });
     }
 
+    personWithSameName = persons.find((p) => p.name === body.name);
+    if (personWithSameName) {
+        return response.status(400).json({
+            error: `Person with name '${body.name}' already exists.`
+        });
+    }
+
     const newPerson = {
         id: generateId(),
         name: body.name,
