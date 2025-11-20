@@ -1,4 +1,30 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
+const dbUser = 'feketebencetyping_db_user';
+const password = process.argv[2];
+const appName = 'noteApp';
+const url = `mongodb+srv://${dbUser}:${password}@fullstack-open.p2ncusy.mongodb.net/${appName}?retryWrites=true&w=majority&appName=fullstack-open`;
+console.log(`Using mongodb connection string: ${url}`);
+
+mongoose.set('strictQuery', false);
+
+mongoose.connect(url, { family: 4 });
+
+const noteSchema = new mongoose.Schema({
+    content: String,
+    important: Boolean
+});
+
+noteSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const Note = mongoose.model('Note', noteSchema);
 
 let notes = [
     {
@@ -52,7 +78,9 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/notes', (request, response) => {
-    response.json(notes);
+    Note.find({}).then((notes) => {
+        response.json(notes);
+    });
 });
 
 app.get('/api/notes/:id', (request, response) => {
