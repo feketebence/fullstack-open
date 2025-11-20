@@ -24,6 +24,12 @@ let persons = [
 ];
 
 const app = express();
+app.use(express.json());
+
+const generateId = () => {
+    const id = Math.ceil(Math.random() * 100_000);
+    return String(id);
+};
 
 app.get('/api/persons', (request, response) => {
     response.json(persons);
@@ -48,6 +54,31 @@ app.get('/info', (request, response) => {
     <br />
     ${new Date().toISOString()}
         `);
+});
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body;
+
+    if (!body.name) {
+        return response.status(400).json({
+            error: '"name" field of the request body is missing'
+        });
+    }
+
+    if (!body.number) {
+        return response.status(400).json({
+            error: '"number" field of the request body is missing'
+        });
+    }
+
+    const newPerson = {
+        id: generateId(),
+        name: body.name,
+        number: body.number
+    };
+    persons = persons.concat(newPerson);
+
+    response.json(newPerson);
 });
 
 app.delete('/api/persons/:id', (request, response) => {
