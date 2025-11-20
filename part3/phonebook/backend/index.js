@@ -1,6 +1,10 @@
+require('dotenv').config();
+
 const express = require('express');
 const morgan = require('morgan');
 const crypto = require('crypto');
+
+const Person = require('./models/person');
 
 let persons = [
     {
@@ -38,24 +42,29 @@ app.use(express.static('dist'));
 app.use(assignRequestId);
 app.use(morgan(':id :method :url :response-time ms, request body: :body'));
 
-const generateId = () => {
-    const id = Math.ceil(Math.random() * 100_000);
-    return String(id);
-};
-
 app.get('/api/persons', (request, response) => {
-    response.json(persons);
+    Person.find({}).then((people) => {
+        response.json(people);
+    });
 });
 
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id;
-    const person = persons.find((p) => p.id === id);
-
-    if (person) {
-        response.json(person);
-    } else {
-        response.status(404).end();
-    }
+    const person = Person.findById(id)
+        .then((person) => {
+            if (person === null) {
+                return response.status(404).end();
+            } else {
+                return response.json(person);
+            }
+        })
+        .catch((error) => {
+            console.log(
+                `Error occurred during fetching person with id: ${id}`,
+                error
+            );
+            response.status(500).end();
+        });
 });
 
 app.get('/info', (request, response) => {
@@ -90,14 +99,14 @@ app.post('/api/persons', (request, response) => {
         });
     }
 
-    const newPerson = {
-        id: generateId(),
+    const newPerson = new Person({
         name: body.name,
         number: body.number
-    };
-    persons = persons.concat(newPerson);
+    });
 
-    response.json(newPerson);
+    newPerson.save().then((savedPerson) => {
+        response.json(savedPerson);
+    });
 });
 
 app.put('/api/persons/:id', (request, response) => {
