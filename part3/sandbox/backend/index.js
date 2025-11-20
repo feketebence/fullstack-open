@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const express = require('express');
-const mongoose = require('mongoose');
 
 const Note = require('./models/note');
 
@@ -23,6 +22,10 @@ let notes = [
     }
 ];
 
+const app = express();
+app.use(express.static('dist'));
+app.use(express.json());
+
 let requestIndex = 0;
 const requestLoggerMiddleware = (request, response, next) => {
     console.log(`== Request nr. ${requestIndex++} ==`);
@@ -38,11 +41,7 @@ const requestLoggerMiddleware = (request, response, next) => {
 
     next();
 };
-
-const app = express();
-app.use(express.json());
 app.use(requestLoggerMiddleware);
-app.use(express.static('dist'));
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello world</h1>');
@@ -54,7 +53,7 @@ app.get('/api/notes', (request, response) => {
     });
 });
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
     const id = request.params.id;
     const note = Note.findById(id)
         .then((note) => {
@@ -64,15 +63,7 @@ app.get('/api/notes/:id', (request, response) => {
                 response.status(404).end();
             }
         })
-        .catch((error) => {
-            console.log(
-                `Error occurred during fetching note with id: "${id}"`,
-                error
-            );
-            response.status(400).send({
-                error: `malformatted id: ${id}`
-            });
-        });
+        .catch((error) => next(error));
 });
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -137,6 +128,22 @@ const unknownEndpointMiddleware = (request, response) => {
 };
 
 app.use(unknownEndpointMiddleware);
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({
+            error: `malformed id`
+        });
+    }
+
+    next(error);
+};
+
+// this has to be the last loaded middleware
+// also all the routes should be registered before this
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
