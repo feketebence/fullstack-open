@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import Notification from './components/Notification';
+import SuccessNotification from './components/SuccessNotification';
+import ErrorNotification from './components/ErrorNotification';
 
 import personService from './services/personService';
 
@@ -80,8 +81,8 @@ const App = () => {
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [searchText, setSearchText] = useState('');
-    const [notificationMessage, setNotificationMessage] =
-        useState('initial message');
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
         personService.getAll().then((initialPersons) => {
@@ -125,17 +126,14 @@ const App = () => {
                         );
                         setPersons(nextPersons);
 
-                        setNotificationMessage(
+                        setSuccessMessage(
                             `Person "${updatedPerson.name}" updated.`
                         );
                         setTimeout(() => {
-                            setNotificationMessage(null);
+                            setSuccessMessage(null);
                         }, 3000);
                     })
                     .catch((error) => {
-                        alert(
-                            `${existingPerson.name} was already deleted from the server.`
-                        );
                         console.log(
                             `Person with id: ${existingPerson.id}, name: ${existingPerson.name}, phoneNumber: ${existingPerson.number} was not found on the server.`,
                             error
@@ -145,6 +143,13 @@ const App = () => {
                             (person) => person.id !== existingPerson.id
                         );
                         setPersons(nextPersons);
+
+                        setErrorMessage(
+                            `${existingPerson.name} was already deleted from the server.`
+                        );
+                        setTimeout(() => {
+                            setErrorMessage(null);
+                        }, 5000);
                     });
             } else {
                 alert(`${newPerson.name} is already added to the phone book.`);
@@ -152,9 +157,9 @@ const App = () => {
         } else {
             personService.create(newPerson).then((createdPerson) => {
                 setPersons(persons.concat(createdPerson));
-                setNotificationMessage(`Person "${newPerson.name}" added.`);
+                setSuccessMessage(`Person "${newPerson.name}" added.`);
                 setTimeout(() => {
-                    setNotificationMessage(null);
+                    setSuccessMessage(null);
                 }, 3000);
             });
             setNewName('');
@@ -168,23 +173,39 @@ const App = () => {
         if (window.confirm(`Delete ${personToDelete.name}?`)) {
             const nextPersons = persons.filter((person) => person.id !== id);
 
-            personService.deletePerson(id).then(() => {
-                setPersons(nextPersons);
+            personService
+                .deletePerson(id)
+                .then(() => {
+                    setPersons(nextPersons);
 
-                setNotificationMessage(
-                    `Person "${personToDelete.name}" deleted.`
-                );
-                setTimeout(() => {
-                    setNotificationMessage(null);
-                }, 3000);
-            });
+                    setSuccessMessage(
+                        `Person "${personToDelete.name}" deleted.`
+                    );
+                    setTimeout(() => {
+                        setSuccessMessage(null);
+                    }, 3000);
+                })
+                .catch((error) => {
+                    console.log('Error:', error);
+                    setErrorMessage(
+                        `Person "${personToDelete.name}" has already been deleted from the server.`
+                    );
+                    setTimeout(() => {
+                        setErrorMessage(null);
+                    }, 5000);
+                    const nextPersons = persons.filter(
+                        (person) => person.id !== id
+                    );
+                    setPersons(nextPersons);
+                });
         }
     };
 
     return (
         <div>
             <h2>Phone book</h2>
-            <Notification message={notificationMessage} />
+            <SuccessNotification message={successMessage} />
+            <ErrorNotification message={errorMessage} />
             <NameFilter
                 searchText={searchText}
                 onChange={handleSearchTextChange}
