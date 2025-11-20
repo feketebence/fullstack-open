@@ -16,7 +16,12 @@ mongoose
     });
 
 const noteSchema = new mongoose.Schema({
-    content: String,
+    content: {
+        type: String,
+        minLength: 5,
+        maxLength: 200,
+        required: true
+    },
     important: Boolean
 });
 
