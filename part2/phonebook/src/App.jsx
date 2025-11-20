@@ -12,10 +12,7 @@ const Person = ({ name, phoneNumber, onDelete }) => {
 };
 
 const PersonList = ({ persons, searchText, handlePersonDelete }) => {
-    console.log('persons:', persons);
-
     const personsToShow = persons.filter((p) => {
-        console.log('(inside personList filter) p:', p);
         return p.name.toUpperCase().includes(searchText.toUpperCase());
     });
 
