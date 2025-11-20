@@ -1,2 +1,2 @@
 # fullstack-open
-Sandbox for https://fullstackopen.com
+Sandbox for [Full stack open course](https://fullstackopen.com/en/) by University of Helsinki.
