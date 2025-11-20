@@ -1,0 +1,16 @@
+### Create a new blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Second blog",
+    "author": "somebody else",
+    "url": "A URL goes here",
+    "likes": 13
+}
+
+### Get all the blogs
+GET http://localhost:3001/api/blogs
+
+### Get a specific blog
+GET http://localhost:3001/api/blogs/691d98f37c9f1a6aebb68073
