@@ -92,6 +92,65 @@ test('if a blog is added without "likes" property, the number of likes defaults 
     assert.strictEqual(addedBlog.likes, 0)
 })
 
+test('a blog can be updated with valid data', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updateData = {
+        title: 'updated title',
+        author: 'updated author',
+        url: 'http://updated-author.dev',
+        likes: 42
+    }
+
+    await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updateData)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAfterOperation = await helper.blogsInDb()
+    assert.strictEqual(blogsAfterOperation.length, helper.initialBlogs.length)
+
+    const updatedBlog = blogsAfterOperation.find(
+        (blog) => (blog.title = updateData.title)
+    )
+
+    assert.strictEqual(updatedBlog.title, updateData.title)
+    assert.strictEqual(updatedBlog.url, updateData.url)
+    assert.strictEqual(updatedBlog.author, updateData.author)
+    assert.strictEqual(updatedBlog.likes, updateData.likes)
+})
+
+test('a blog can be updated with valid data, if "likes" field is not specified, it defaults to 0 ', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updateData = {
+        title: 'updated title without likes field',
+        author: 'updated author',
+        url: 'http://updated-author.dev'
+    }
+
+    await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updateData)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAfterOperation = await helper.blogsInDb()
+    assert.strictEqual(blogsAfterOperation.length, helper.initialBlogs.length)
+
+    const updatedBlog = blogsAfterOperation.find(
+        (blog) => (blog.title = updateData.title)
+    )
+
+    assert.strictEqual(updatedBlog.title, updateData.title)
+    assert.strictEqual(updatedBlog.url, updateData.url)
+    assert.strictEqual(updatedBlog.author, updateData.author)
+    assert.strictEqual(updatedBlog.likes, 0)
+})
+
 test('a blog without title cannot be added', async () => {
     const invalidBlog = {
         author: 'Somebody',
