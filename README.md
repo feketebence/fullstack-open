@@ -4,7 +4,7 @@ Sandbox for [Full stack open course](https://fullstackopen.com/en/) by Universit
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part3/saving_data_to_mongo_db#debugging-node-applications
+Currently at: https://fullstackopen.com/en/part3/saving_data_to_mongo_db#connecting-the-backend-to-a-database
 
 todo:
 
