@@ -3,78 +3,11 @@ import { useState } from 'react';
 
 import SuccessNotification from './components/SuccessNotification';
 import ErrorNotification from './components/ErrorNotification';
+import PersonList from './components/PersonList';
+import PersonForm from './components/PersonForm';
+import NameFilter from './components/NameFilter';
 
 import personService from './services/personService';
-
-const Person = ({ name, phoneNumber, onDelete }) => {
-    return (
-        <li>
-            {name} {phoneNumber} <button onClick={onDelete}>Delete</button>
-        </li>
-    );
-};
-
-const PersonList = ({ persons, searchText, handlePersonDelete }) => {
-    const personsToShow = persons.filter((p) => {
-        return p.name.toUpperCase().includes(searchText.toUpperCase());
-    });
-
-    return (
-        <>
-            <h2>Numbers</h2>
-            <ol>
-                {personsToShow.map((person) => (
-                    <Person
-                        key={person.id}
-                        name={person.name}
-                        phoneNumber={person.number}
-                        onDelete={() => handlePersonDelete(person.id)}
-                    />
-                ))}
-            </ol>
-        </>
-    );
-};
-
-const NameFilter = ({ searchText, onChange }) => {
-    return (
-        <>
-            Filter names with:{' '}
-            <input type="text" value={searchText} onChange={onChange}></input>
-        </>
-    );
-};
-
-const PersonForm = ({
-    name,
-    onNameChange,
-    number,
-    onNumberChange,
-    onSubmit
-}) => {
-    return (
-        <div>
-            <h3>Add new person</h3>
-            <form onSubmit={onSubmit}>
-                <div>
-                    name:{' '}
-                    <input type="text" value={name} onChange={onNameChange} />
-                    <br />
-                    number:{' '}
-                    <input
-                        type="text"
-                        value={number}
-                        onChange={onNumberChange}
-                    ></input>
-                </div>
-
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
-        </div>
-    );
-};
 
 const App = () => {
     const [persons, setPersons] = useState([]);
