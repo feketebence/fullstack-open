@@ -92,6 +92,50 @@ test('if a blog is added without "likes" property, the number of likes defaults 
     assert.strictEqual(addedBlog.likes, 0)
 })
 
+test('a blog without title cannot be added', async () => {
+    const invalidBlog = {
+        author: 'Somebody',
+        url: 'https://yetanotherurl.com/',
+        likes: 7
+    }
+
+    const response = await api
+        .post('/api/blogs')
+        .send(invalidBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(
+        response.body.error,
+        'Blog validation failed: title: Path `title` is required.'
+    )
+
+    const blogsAfterOperation = await helper.blogsInDb()
+    assert.strictEqual(blogsAfterOperation.length, helper.initialBlogs.length)
+})
+
+test('a blog without url cannot be added', async () => {
+    const invalidBlog = {
+        title: 'Blog without url',
+        author: 'Somebody',
+        likes: 5
+    }
+
+    const response = await api
+        .post('/api/blogs')
+        .send(invalidBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(
+        response.body.error,
+        'Blog validation failed: url: Path `url` is required.'
+    )
+
+    const blogsAfterOperation = await helper.blogsInDb()
+    assert.strictEqual(blogsAfterOperation.length, helper.initialBlogs.length)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })

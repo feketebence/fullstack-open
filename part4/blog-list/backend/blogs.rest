@@ -9,6 +9,16 @@ Content-Type: application/json
     "likes": 13
 }
 
+### Attempt to create an invalid blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "author": "somebody else",
+    "url": "A URL goes here",
+    "likes": 13
+}
+
 ### Get all the blogs
 GET http://localhost:3001/api/blogs
 
