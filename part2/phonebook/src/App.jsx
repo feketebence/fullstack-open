@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 
+import Notification from './components/Notification';
+
 import personService from './services/personService';
 
 const Person = ({ name, phoneNumber, onDelete }) => {
@@ -78,6 +80,8 @@ const App = () => {
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [searchText, setSearchText] = useState('');
+    const [notificationMessage, setNotificationMessage] =
+        useState('initial message');
 
     useEffect(() => {
         personService.getAll().then((initialPersons) => {
@@ -120,6 +124,13 @@ const App = () => {
                                 : person
                         );
                         setPersons(nextPersons);
+
+                        setNotificationMessage(
+                            `Person "${updatedPerson.name}" updated.`
+                        );
+                        setTimeout(() => {
+                            setNotificationMessage(null);
+                        }, 3000);
                     })
                     .catch((error) => {
                         alert(
@@ -141,6 +152,10 @@ const App = () => {
         } else {
             personService.create(newPerson).then((createdPerson) => {
                 setPersons(persons.concat(createdPerson));
+                setNotificationMessage(`Person "${newPerson.name}" added.`);
+                setTimeout(() => {
+                    setNotificationMessage(null);
+                }, 3000);
             });
             setNewName('');
             setNewNumber('');
@@ -155,6 +170,13 @@ const App = () => {
 
             personService.deletePerson(id).then(() => {
                 setPersons(nextPersons);
+
+                setNotificationMessage(
+                    `Person "${personToDelete.name}" deleted.`
+                );
+                setTimeout(() => {
+                    setNotificationMessage(null);
+                }, 3000);
             });
         }
     };
@@ -162,6 +184,7 @@ const App = () => {
     return (
         <div>
             <h2>Phone book</h2>
+            <Notification message={notificationMessage} />
             <NameFilter
                 searchText={searchText}
                 onChange={handleSearchTextChange}
