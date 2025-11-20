@@ -41,6 +41,30 @@ test('unique identifier of a blog is named "id" and has correct format', async (
     assert.strictEqual(objectIdRegex.test(uniqueIdentifier), true)
 })
 
+test('a valid blog can be added', async () => {
+    const newBlog = {
+        title: 'New entry',
+        author: 'Somebody',
+        url: 'https://someurl.com/',
+        likes: 53
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAfterOperation = await helper.blogsInDb()
+    assert.strictEqual(
+        blogsAfterOperation.length,
+        helper.initialBlogs.length + 1
+    )
+
+    const titles = blogsAfterOperation.map((blog) => blog.title)
+    assert(titles.includes('New entry'))
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
