@@ -18,8 +18,25 @@ let notes = [
     }
 ];
 
+let requestIndex = 0;
+const requestLoggerMiddleware = (request, response, next) => {
+    console.log(`== Request nr. ${requestIndex++} ==`);
+    console.log('Method: ', request.method);
+    console.log('Path: ', request.path);
+
+    let body = 'N/A';
+    if (request.body) {
+        body = `\n` + JSON.stringify(request.body, null, 4);
+    }
+    console.log('Body: ', body);
+    console.log('---\n');
+
+    next();
+};
+
 const app = express();
 app.use(express.json());
+app.use(requestLoggerMiddleware);
 
 const generateId = () => {
     const maxId =
@@ -74,6 +91,12 @@ app.post('/api/notes', (request, response) => {
 
     response.json(note);
 });
+
+const unknownEndpointMiddleware = (request, response) => {
+    response.status(404).send({ error: `unknown endpoint: ${request.path}` });
+};
+
+app.use(unknownEndpointMiddleware);
 
 const PORT = 3001;
 app.listen(PORT, () => {
