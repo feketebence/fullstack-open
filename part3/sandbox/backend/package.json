@@ -11,7 +11,7 @@
         "dev": "node --watch index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
-        "build:full": "npm run build:ui && git add . && git commit -m ui-build-$(date --utc +%Y-%m-%dT%H-%M-%SZ) && git push"
+        "deploy:full": "npm run build:ui && git add . && git commit -m ui-build-$(date --utc +%Y-%m-%dT%H-%M-%SZ) && git push"
     },
     "dependencies": {
         "cors": "^2.8.5",
