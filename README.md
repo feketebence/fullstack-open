@@ -4,7 +4,7 @@ Sandbox for [Full stack open course](https://fullstackopen.com/en/) by Universit
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part3/saving_data_to_mongo_db#error-handling
+Currently at: https://fullstackopen.com/en/part3/validation_and_es_lint#lint
 
 todo:
 
