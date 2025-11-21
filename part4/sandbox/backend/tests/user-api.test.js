@@ -7,7 +7,6 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 
-const Note = require('../models/note')
 const User = require('../models/user')
 
 const api = supertest(app)

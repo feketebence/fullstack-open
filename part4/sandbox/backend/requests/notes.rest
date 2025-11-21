@@ -20,8 +20,9 @@ POST http://localhost:3001/api/notes
 content-type: application/json
 
 {
-    "content": "Progress with the tutorials.",
-    "important": false
+    "content": "Another note created by a user",
+    "important": false,
+    "userId": "692038471adfe66404872756"
 }
 
 ### Update a note
