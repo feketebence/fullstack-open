@@ -13,3 +13,13 @@ content-type: application/json
     "name": "Superuser",
     "password": "s3cr3t"
 }
+
+### 
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+    "username": "daffy",
+    "name": "Daffy Duck",
+    "password": "quackingAroundTheWorld"
+}
