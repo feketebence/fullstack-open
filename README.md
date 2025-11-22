@@ -4,7 +4,7 @@ Sandbox for [Full stack open course](https://fullstackopen.com/en/) by Universit
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part4/structure_of_backend_application_introduction_to_testing#exercises-4-3-4-7
+Currently at: https://fullstackopen.com/en/part4/token_authentication#exercises-4-15-4-23
 
 todo:
 
