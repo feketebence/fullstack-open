@@ -1,9 +1,10 @@
 ### Create a new blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNvbWVvbmUiLCJpZCI6IjY5MjQzYzg1ZTQ3ZTJhNWRkYjBiZDc5ZSIsImlhdCI6MTc2Mzk4MjcyNiwiZXhwIjoxNzYzOTg2MzI2fQ.4CVjvCxe-IP4ciItrw6Pb-Z7lXQcJEC7d8fIYaEQMc0
 
 {
-    "title": "Second blog",
+    "title": "third blog",
     "author": "somebody else",
     "url": "A URL goes here",
     "likes": 13
