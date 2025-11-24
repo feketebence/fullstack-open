@@ -1,20 +1,41 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 h1 {
-    color: green;
+    color: rgba(0, 8, 15, 1);
+    text-align: center;
     font-style: italic;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+        'Lucida Sans', Arial, sans-serif;
+}
+
+h2 {
+    color: rgb(34, 30, 30);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 .note {
-    color: grey;
+    color: rgb(31, 31, 31);
     padding-top: 3px;
     font-size: 15px;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .error {
-    color: red;
-    background: lightgrey;
-    font-size: 20px;
-    border-style: solid;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+
+    background: rgb(255, 230, 0);
+    margin: 2em;
+    padding: 1em;
+    border: 0.2em solid rgb(0, 0, 0);
+}
+
+.container {
+    background: rgb(203, 232, 241);
+    margin: 2em;
+    padding: 1em;
+    border: 0.2em solid rgb(0, 0, 0);
 }

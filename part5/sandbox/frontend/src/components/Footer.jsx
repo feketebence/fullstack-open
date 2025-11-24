@@ -1,8 +1,10 @@
 const Footer = () => {
     const footerStyle = {
-        color: 'green',
-        fontStyle: 'italic'
-    };
+        textAlign: 'center',
+        color: 'grey',
+        fontStyle: 'italic',
+        fontFamily: 'Courier New'
+    }
 
     return (
         <div style={footerStyle}>
@@ -10,9 +12,11 @@ const Footer = () => {
             <p>
                 Note app, made with ❤️ based on{' '}
                 <a href="https://fullstackopen.com/en/">fullstackopen.com</a>
+                <br />
+                {new Date().getFullYear()}
             </p>
         </div>
-    );
-};
+    )
+}
 
-export default Footer;
+export default Footer
