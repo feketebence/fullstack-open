@@ -2,12 +2,12 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "testuser-2",
-    "name": "Test User 2",
+    "username": "testuser-1",
+    "name": "Test User 1",
     "password": "somepassword"
 }
 
-###
+### Attempt to create an invalid user (password is missing)
 
 POST http://localhost:3001/api/users
 Content-Type: application/json
@@ -17,7 +17,7 @@ Content-Type: application/json
     "name": "Test User 2"
 }
 
-###
+### Attempt to create an invalid user (password is too short)
 
 POST http://localhost:3001/api/users
 Content-Type: application/json
@@ -25,13 +25,16 @@ Content-Type: application/json
 {
     "username": "testuser-3",
     "name": "Test User 3",
-    "password": "123"
+    "password": "qq"
 }
 
-###
+### Get all the users
 
 GET http://localhost:3001/api/users
 
-###
+### Get a specific user
 
-GET http://localhost:3001/api/users/69241f5ff9a0a827a916f049
+GET http://localhost:3001/api/users/6924319f5ed8168766f25ffa
+
+### Delete a specific user (no cascade: does not delete the blogs created by the user) 
+DELETE http://localhost:3001/api/users/69242b39152268fca9fc94db
