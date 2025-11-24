@@ -1,0 +1,38 @@
+### Get all notes
+GET http://localhost:3001/api/notes
+
+### Get specific note
+GET http://localhost:3001/api/notes/692051d7092419e87020f96d
+
+### Get non-existent note
+GET http://localhost:3001/api/notes/691afabfbb3c21841bfab099
+
+### Get for invalid id => 400 error
+GET http://localhost:3001/api/notes/someInvalidId
+
+
+### Get for non-existent endpoint
+GET http://localhost:3001/api/nonexistent
+
+
+### Create a new note
+POST http://localhost:3001/api/notes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhZmZ5IiwiaWQiOiI2OTIwNmQwZjQ5YmYxMjEwMjk5ZjRiOTMiLCJpYXQiOjE3NjM3MzQ0MDF9.GVsw1rzCGlMwqr8Iv_GGNS_K-Wza6pLpVZLEfDN31VE
+content-type: application/json
+
+{
+    "content": "Yet another note created by 'daffy' user",
+    "important": false
+}
+
+### Update a note
+PUT http://localhost:3001/api/notes/691b107121fbabb546551043
+content-type: application/json
+
+{
+    "content": "Soak in the sun.",
+    "important": true
+}
+
+### Delete a specific note
+DELETE http://localhost:3001/api/notes/691c620f978a394d2c394ba5

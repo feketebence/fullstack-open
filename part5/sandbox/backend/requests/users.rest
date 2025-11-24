@@ -1,0 +1,25 @@
+### Get all users
+GET http://localhost:3001/api/users
+
+### Get specific user
+GET http://localhost:3001/api/users/692038471adfe66404872756
+
+### Create a new user
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+    "username": "root",
+    "name": "Superuser",
+    "password": "s3cr3t"
+}
+
+### 
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+    "username": "daffy",
+    "name": "Daffy Duck",
+    "password": "quackingAroundTheWorld"
+}
