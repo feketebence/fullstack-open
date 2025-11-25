@@ -182,7 +182,7 @@ const App = () => {
                         show {showAll ? 'important' : 'all'}
                     </button>
                 </div>
-                <ul>
+                <ol>
                     {notesToShow.map((note) => (
                         <Note
                             key={note.id}
@@ -192,7 +192,7 @@ const App = () => {
                             }
                         />
                     ))}
-                </ul>
+                </ol>
             </div>
 
             <Footer />

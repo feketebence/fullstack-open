@@ -15,6 +15,29 @@ h2 {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+button {
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 900;
+    border: 2px solid black;
+    padding: 8px 5px 5px 5px;
+    margin-bottom: 2px;
+}
+
+input {
+    font-size: 14px;
+    border: 2px solid black;
+    padding: 8px 5px 5px 5px;
+    margin-bottom: 2px;
+}
+
+button:hover {
+    color: white;
+    background-color: black;
+}
+
 .note {
     color: rgb(31, 31, 31);
     padding-top: 3px;
@@ -38,4 +61,8 @@ h2 {
     margin: 2em;
     padding: 1em;
     border: 0.2em solid rgb(0, 0, 0);
+}
+
+.authorName {
+    color: rgb(128, 128, 128);
 }
