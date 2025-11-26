@@ -1,10 +1,10 @@
 # fullstack-open
 
-Sandbox for [Full stack open course](https://fullstackopen.com/en/) by University of Helsinki.
+Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopener noreferrer">fullstack-open course</a> by University of Helsinki.
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part5/props_children_and_proptypes#references-to-components-with-ref
+Currently at: https://fullstackopen.com/en/part5/testing_react_apps#exercises-5-13-5-16
 
 todo:
 
