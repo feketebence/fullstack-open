@@ -101,10 +101,22 @@ const App = () => {
         try {
             blogFormRef.current.toggleVisibility()
             const createdBlog = await blogService.create(blogObject)
-            setBlogs(blogs.concat(createdBlog))
+
+            // add the creator user's data to the newly created blog
+            // NOTE: this should be done on the backend, but I don't
+            // know how to populate a newly saved blog object
+            const createdBlogWithUser = {
+                ...createdBlog,
+                user: {
+                    name: user.name,
+                    username: user.username
+                }
+            }
+
+            setBlogs(blogs.concat(createdBlogWithUser))
 
             setMessage(
-                `Added new blog: ${createdBlog.title} - ${createdBlog.author}`
+                `Added new blog: ${createdBlogWithUser.title} - ${createdBlogWithUser.author}`
             )
             setNotificationType('success')
             setTimeout(() => {
