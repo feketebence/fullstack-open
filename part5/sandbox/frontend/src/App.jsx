@@ -103,31 +103,31 @@ const App = () => {
             <h1>notes-app</h1>
             <Notification message={errorMessage} />
 
-            {!user && (
-                <div className="container">
+            <div className="container">
+                {!user && (
                     <Togglable
                         revealButtonLabel="login"
                         hideButtonLabel="cancel"
                     >
                         <LoginForm doLoginFn={doLogin} />
                     </Togglable>
-                </div>
-            )}
-            {user && (
-                <div className="container">
-                    <p>
-                        <b>{user.name}</b> is logged in
-                    </p>
-                    <button onClick={handleLogout}>log out</button>
+                )}
+                {user && (
+                    <>
+                        <p>
+                            <b>{user.name}</b> is logged in
+                        </p>
+                        <button onClick={handleLogout}>log out</button>
 
-                    <Togglable
-                        revealButtonLabel="show note creation form"
-                        hideButtonLabel="close note form"
-                    >
-                        <NoteFrom createNoteFn={addNote} />
-                    </Togglable>
-                </div>
-            )}
+                        <Togglable
+                            revealButtonLabel="show note creation form"
+                            hideButtonLabel="close note form"
+                        >
+                            <NoteFrom createNoteFn={addNote} />
+                        </Togglable>
+                    </>
+                )}
+            </div>
 
             <div className="container">
                 <div>
