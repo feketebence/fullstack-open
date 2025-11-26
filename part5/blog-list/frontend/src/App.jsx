@@ -69,6 +69,34 @@ const App = () => {
         setUser(null)
     }
 
+    const handleLikeClick = async (id) => {
+        const blog = blogs.find((b) => b.id === id)
+
+        const newBlog = {
+            ...blog,
+            likes: blog.likes + 1
+        }
+
+        try {
+            const updatedBlog = await blogService.update(id, newBlog)
+
+            // replace the old object with the updated one
+            const nextBlogs = blogs.map((b) => (b.id === id ? updatedBlog : b))
+
+            setBlogs(nextBlogs)
+        } catch {
+            setMessage(
+                `Blog "${blog.title} - ${blog.author}" was already removed from the server`
+            )
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
+
+            const nextBlogs = blogs.filter((n) => n.id !== id)
+            setBlogs(nextBlogs)
+        }
+    }
+
     const addBlog = async (blogObject) => {
         try {
             blogFormRef.current.toggleVisibility()
@@ -151,7 +179,11 @@ const App = () => {
             <br />
 
             {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} />
+                <Blog
+                    key={blog.id}
+                    blog={blog}
+                    onHandleLikeClick={() => handleLikeClick(blog.id)}
+                />
             ))}
         </div>
     )
