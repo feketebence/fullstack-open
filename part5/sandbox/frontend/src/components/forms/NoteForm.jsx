@@ -23,6 +23,7 @@ const NoteFrom = ({ createNoteFn }) => {
                     type="text"
                     value={newNote}
                     onChange={(event) => setNewNote(event.target.value)}
+                    placeholder="write note content here"
                 />
                 <button type="submit">add note</button>
             </form>
