@@ -97,6 +97,39 @@ const App = () => {
         }
     }
 
+    const handleRemoveClick = async (id) => {
+        const selectedBlog = blogs.find((b) => b.id === id)
+
+        const deleteConfirmed = window.confirm(
+            `You are going to delete blog ${selectedBlog.title} by ${selectedBlog.author}`
+        )
+        if (!deleteConfirmed) {
+            return
+        }
+
+        try {
+            await blogService.deleteBlog(selectedBlog)
+            const nextBlogs = blogs.filter((b) => b.id !== selectedBlog.id)
+            setBlogs(nextBlogs)
+
+            setMessage(
+                `Successfully deleted blog "${selectedBlog.title} - ${selectedBlog.author}"`
+            )
+            setNotificationType('success')
+
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
+        } catch {
+            setMessage(
+                `Error occurred during deleting blog "${selectedBlog.title} - ${selectedBlog.author}"`
+            )
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
+        }
+    }
+
     const addBlog = async (blogObject) => {
         try {
             blogFormRef.current.toggleVisibility()
@@ -197,7 +230,9 @@ const App = () => {
                     <Blog
                         key={blog.id}
                         blog={blog}
-                        onHandleLikeClick={() => handleLikeClick(blog.id)}
+                        user={user}
+                        onLikeClick={() => handleLikeClick(blog.id)}
+                        onRemoveClick={() => handleRemoveClick(blog.id)}
                     />
                 ))}
         </div>
