@@ -190,13 +190,16 @@ const App = () => {
 
             <br />
 
-            {blogs.map((blog) => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    onHandleLikeClick={() => handleLikeClick(blog.id)}
-                />
-            ))}
+            {blogs
+                .sort((a, b) => a.likes - b.likes)
+                .reverse()
+                .map((blog) => (
+                    <Blog
+                        key={blog.id}
+                        blog={blog}
+                        onHandleLikeClick={() => handleLikeClick(blog.id)}
+                    />
+                ))}
         </div>
     )
 }
