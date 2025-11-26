@@ -24,7 +24,7 @@ const Blog = ({ blog, onHandleLikeClick }) => {
                     likes {blog.likes}{' '}
                     <button onClick={onHandleLikeClick}>like</button>
                     <br />
-                    {blog.author} <br />
+                    Added by: {blog.user.name} <br />
                 </>
             )}
         </div>

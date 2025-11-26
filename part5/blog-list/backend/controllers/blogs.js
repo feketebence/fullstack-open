@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 
+const logger = require('../utils/logger')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
@@ -57,6 +58,10 @@ blogsRouter.post('/', async (request, response) => {
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
 
+    logger.info(
+        `User '${user.name}' created new blog with title '${blog.title}'`
+    )
+
     response.status(201).json(savedBlog)
 })
 
@@ -66,6 +71,20 @@ blogsRouter.delete('/:id', async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
+    const tokenFromRequest = getTokenFromClientRequest(request)
+    const decodedToken = jwt.verify(tokenFromRequest, process.env.SECRET)
+
+    if (!decodedToken.id) {
+        // if the token does not contain the user's identity (decodedToken.id is undefined)
+        return response.status(401).json({ error: 'invalid token' })
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    if (!user) {
+        return response.status(400).json({ error: 'userId missing or invalid' })
+    }
+
     if (!request.body.title) {
         return response.status(400).json({ error: '"title" field is missing' })
     }
@@ -74,7 +93,7 @@ blogsRouter.put('/:id', async (request, response) => {
         return response.status(400).json({ error: '"url" field is missing' })
     }
 
-    let existingBlog = await Blog.findById(request.params.id)
+    let existingBlog = await Blog.findById(request.params.id).populate('user')
     if (!existingBlog) {
         return response.status(404).end()
     }
@@ -91,6 +110,10 @@ blogsRouter.put('/:id', async (request, response) => {
     }
 
     const updatedBlog = await existingBlog.save()
+
+    logger.info(
+        `User '${user.username}' updated blog [id: '${updatedBlog.id}', title '${updatedBlog.title}', created by: ${updatedBlog.user.username}]`
+    )
     response.json(updatedBlog)
 })
 
