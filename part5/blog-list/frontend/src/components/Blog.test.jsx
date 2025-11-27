@@ -22,8 +22,10 @@ describe('<Blog />', () => {
         name: 'Jack Rabbit'
     }
 
+    const likeClickHandler = vi.fn()
+
     beforeEach(() => {
-        render(<Blog blog={blog} user={user} />)
+        render(<Blog blog={blog} user={user} onLikeClick={likeClickHandler} />)
     })
 
     test('renders content', () => {
@@ -51,5 +53,24 @@ describe('<Blog />', () => {
 
         const likes = screen.queryByText(`likes ${blog.likes}`)
         expect(likes).toBeVisible()
+    })
+
+    test('after clicking like, number of likes handler is called', async () => {
+        const user = userEvent.setup()
+        const expandButton = screen.getByRole('button', {
+            name: /expand/i
+        })
+        await user.click(expandButton)
+
+        const likeButton = screen.getByRole('button', {
+            name: /like/i
+        })
+
+        const numberOfLikeClicks = 2
+        for (let i = 0; i < numberOfLikeClicks; i++) {
+            await user.click(likeButton)
+        }
+
+        expect(likeClickHandler.mock.calls).toHaveLength(numberOfLikeClicks)
     })
 })
