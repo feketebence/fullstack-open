@@ -13,7 +13,8 @@
         "lint": "eslint .",
         "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
         "publish:ui": "./scripts/publish-ui.sh",
-        "build-publish:ui": "npm run build:ui && npm run publish:ui"
+        "build-publish:ui": "npm run build:ui && npm run publish:ui",
+        "start:test": "cross-env NODE_ENV=test node --watch index.js"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",
@@ -25,6 +26,7 @@
     "devDependencies": {
         "@eslint/js": "^9.39.1",
         "@stylistic/eslint-plugin": "^5.6.0",
+        "cross-env": "^10.1.0",
         "eslint": "^9.39.1",
         "globals": "^16.5.0",
         "supertest": "^7.1.4"
