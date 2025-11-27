@@ -20,11 +20,12 @@ const Blog = ({ blog, user, onLikeClick, onRemoveClick }) => {
             {expanded && (
                 <>
                     <br />
-                    {blog.url} <br />
-                    likes {blog.likes}{' '}
-                    <button onClick={onLikeClick}>like</button>
-                    <br />
-                    Added by: {blog.user.name} <br />
+                    <p>{blog.url}</p>
+                    <p>
+                        likes {blog.likes}{' '}
+                        <button onClick={onLikeClick}>like</button>
+                    </p>
+                    <p>Added by: {blog.user.name}</p>
                     {user.username === blog.user.username && (
                         <button onClick={onRemoveClick}>remove</button>
                     )}
