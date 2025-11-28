@@ -5,8 +5,11 @@ const Note = ({ note, onToggleImportance }) => {
 
     return (
         <li className="note">
-            {note.important ? <b>{note.content}</b> : note.content}
-            <i className="authorName">{authorUser}</i>
+            <span>
+                {note.important ? <b>{note.content}</b> : note.content}
+                <i className="authorName">{authorUser}</i>
+            </span>
+
             <button onClick={onToggleImportance}>{label}</button>
         </li>
     )
