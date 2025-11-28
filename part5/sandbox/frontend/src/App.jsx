@@ -71,11 +71,11 @@ const App = () => {
         setUser(null)
     }
 
-    const addNote = (noteObject) => {
+    const addNote = async (noteObject) => {
         noteFormRef.current.toggleVisibility()
-        noteService
-            .create(noteObject)
-            .then((createdNote) => setNotes(notes.concat(createdNote)))
+        const createdNote = await noteService.create(noteObject)
+
+        setNotes(notes.concat(createdNote))
     }
 
     const doLogin = async (credentials) => {
