@@ -101,5 +101,23 @@ describe('Blog app', () => {
                 page.getByRole('button', { name: 'hide' })
             ).toBeVisible()
         })
+
+        describe('and a blog is added', () => {
+            const title = 'new example blog'
+            const author = 'Some Author'
+            const url = 'https://some-example.url/blog'
+
+            beforeEach(async ({ page }) => {
+                await addNewBlog(page, title, author, url)
+            })
+
+            test('the blog can be liked', async ({ page }) => {
+                await page.getByRole('button', { name: 'expand' }).click()
+                await expect(page.getByText('likes 0 like')).toBeVisible()
+
+                await page.getByRole('button', { name: 'like' }).click()
+                await expect(page.getByText('likes 1 like')).toBeVisible()
+            })
+        })
     })
 })
