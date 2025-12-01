@@ -75,23 +75,40 @@ describe('Blog app', () => {
     })
 
     describe('When logged in', () => {
+        const firstBlog = {
+            title: 'new example blog',
+            author: 'Some Author',
+            url: 'https://some-example.url/blog'
+        }
+
+        const secondBlog = {
+            title: 'another example blog',
+            author: 'Another Author',
+            url: 'https://aonther-example.url/blog'
+        }
+
         beforeEach(async ({ page }) => {
             await loginWith(page, exampleUser.username, exampleUser.password)
         })
 
         test('a new blog can be created', async ({ page }) => {
-            const title = 'new example blog'
-            const author = 'Some Author'
-            const url = 'https://some-example.url/blog'
-
-            await addNewBlog(page, title, author, url)
+            await addNewBlog(
+                page,
+                firstBlog.title,
+                firstBlog.author,
+                firstBlog.url
+            )
 
             await expect(
-                page.getByText(`✅ Added new blog: ${title} - ${author} ✅`)
+                page.getByText(
+                    `✅ Added new blog: ${firstBlog.title} - ${firstBlog.author} ✅`
+                )
             ).toBeVisible()
 
             await expect(
-                page.getByText(`${title} - ${author} expand`)
+                page.getByText(
+                    `${firstBlog.title} - ${firstBlog.author} expand`
+                )
             ).toBeVisible()
 
             await expect(
@@ -100,7 +117,7 @@ describe('Blog app', () => {
 
             await page.getByRole('button', { name: 'expand' }).click()
 
-            await expect(page.getByText(url)).toBeVisible()
+            await expect(page.getByText(firstBlog.url)).toBeVisible()
             await expect(page.getByText('likes 0 like')).toBeVisible()
             await expect(
                 page.getByText('Added by: Lauretta Erminia')
@@ -111,12 +128,13 @@ describe('Blog app', () => {
         })
 
         describe('and a blog is added', () => {
-            const title = 'new example blog'
-            const author = 'Some Author'
-            const url = 'https://some-example.url/blog'
-
             beforeEach(async ({ page }) => {
-                await addNewBlog(page, title, author, url)
+                await addNewBlog(
+                    page,
+                    firstBlog.title,
+                    firstBlog.author,
+                    firstBlog.url
+                )
             })
 
             test('the blog can be liked', async ({ page }) => {
@@ -139,14 +157,16 @@ describe('Blog app', () => {
                 page.once('dialog', (dialog) => {
                     console.log(`Dialog message: ${dialog.message()}`)
                     expect(dialog.message()).toStrictEqual(
-                        `You are going to delete blog ${title} by ${author}`
+                        `You are going to delete blog ${firstBlog.title} by ${firstBlog.author}`
                     )
                     dialog.accept()
                 })
                 await page.getByRole('button', { name: 'remove' }).click()
 
                 await expect(
-                    page.getByText(`${title} - ${author} expand`)
+                    page.getByText(
+                        `${firstBlog.title} - ${firstBlog.author} expand`
+                    )
                 ).not.toBeVisible()
 
                 await expect(
@@ -180,6 +200,19 @@ describe('Blog app', () => {
                 await expect(
                     page.getByRole('button', { name: 'remove' })
                 ).not.toBeVisible()
+            })
+
+            test('and another blog is added, and the like buttons of the blogs are clicked, then the blogs are ordered in descending order by the number of likes', async ({
+                page
+            }) => {
+                await addNewBlog(
+                    page,
+                    secondBlog.title,
+                    secondBlog.author,
+                    secondBlog.url
+                )
+
+                await page.pause()
             })
         })
     })
