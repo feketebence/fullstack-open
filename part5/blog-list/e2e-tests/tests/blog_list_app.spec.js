@@ -76,15 +76,15 @@ describe('Blog app', () => {
 
     describe('When logged in', () => {
         const firstBlog = {
-            title: 'new example blog',
-            author: 'Some Author',
-            url: 'https://some-example.url/blog'
+            title: 'first blog',
+            author: 'First Author',
+            url: 'https://first-example.url/blog'
         }
 
         const secondBlog = {
-            title: 'another example blog',
-            author: 'Another Author',
-            url: 'https://aonther-example.url/blog'
+            title: 'second blog',
+            author: 'Second Author',
+            url: 'https://second-example.url/blog'
         }
 
         beforeEach(async ({ page }) => {
@@ -205,6 +205,19 @@ describe('Blog app', () => {
             test('and another blog is added, and the like buttons of the blogs are clicked, then the blogs are ordered in descending order by the number of likes', async ({
                 page
             }) => {
+                await page.getByRole('button', { name: 'expand' }).click()
+
+                // clicking the firstBlog's like button
+                const firstBlogLikeButton = page
+                    .locator('div.blog')
+                    .filter({
+                        hasText: `${firstBlog.title} - ${firstBlog.author}`
+                    })
+                    .locator('button:has-text("like")')
+                await firstBlogLikeButton.click()
+
+                await page.pause()
+
                 await addNewBlog(
                     page,
                     secondBlog.title,
@@ -213,6 +226,52 @@ describe('Blog app', () => {
                 )
 
                 await page.pause()
+
+                await page.getByRole('button', { name: 'expand' }).click()
+
+                // grab both blogs' div container
+                const ids = await page
+                    .locator('div.blog')
+                    .evaluateAll((divs) => divs.map((d) => d.id))
+
+                console.log(
+                    'ids after clicking the firstBlog like button:',
+                    ids
+                )
+
+                await page.pause()
+
+                const secondBlogLikeButton = page
+                    .locator('div.blog')
+                    .filter({
+                        hasText: `${secondBlog.title} - ${secondBlog.author}`
+                    })
+                    .locator('button:has-text("like")')
+
+                // clicking the secondBlog's like button
+                await secondBlogLikeButton.click()
+
+                // clicking the secondBlog's like button for the 2nd time
+                await expect(
+                    page.locator('div.blog').filter({ hasText: 'likes 1' })
+                ).toHaveCount(2)
+
+                await secondBlogLikeButton.click()
+
+                await expect(page.getByText('likes 2')).toBeVisible()
+                await page.pause()
+
+                const idsAfterClicks = await page
+                    .locator('div.blog')
+                    .evaluateAll((divs) => divs.map((d) => d.id))
+                console.log(
+                    'idsAfterClicks.reverse():',
+                    idsAfterClicks.reverse()
+                )
+
+                await page.pause()
+
+                expect(ids).toStrictEqual(idsAfterClicks.reverse())
             })
         })
     })

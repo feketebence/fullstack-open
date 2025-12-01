@@ -12,7 +12,7 @@ const Blog = ({ blog, user, onLikeClick, onRemoveClick }) => {
     }
 
     return (
-        <div style={blogStyle}>
+        <div className="blog" style={blogStyle} id={blog.id}>
             {blog.title} - {blog.author}{' '}
             <button onClick={() => setExpanded(!expanded)}>
                 {expanded ? 'hide' : 'expand'}
