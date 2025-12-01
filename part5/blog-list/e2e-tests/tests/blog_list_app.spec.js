@@ -202,10 +202,11 @@ describe('Blog app', () => {
                 ).not.toBeVisible()
             })
 
-            // todo: this test is not working, div id grabbing is not reliable
+            // NOTE: this test might be flaky c:
             test('and another blog is added, and the like buttons of the blogs are clicked, then the blogs are ordered in descending order by the number of likes', async ({
                 page
             }) => {
+                test.setTimeout(10000)
                 await page.getByRole('button', { name: 'expand' }).click()
 
                 // clicking the firstBlog's like button
@@ -250,13 +251,10 @@ describe('Blog app', () => {
                 await secondBlogLikeButton.click()
 
                 await expect(page.getByText('likes 2')).toBeVisible()
-                await page.pause()
 
                 const idsAfterClicks = await page
                     .locator('div.blog')
                     .evaluateAll((divs) => divs.map((d) => d.id))
-
-                await page.pause()
 
                 expect(ids).toEqual(idsAfterClicks.reverse())
             })
