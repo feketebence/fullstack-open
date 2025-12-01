@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, addNewBlog } = require('./helper')
 
 describe('Blog app', () => {
     const exampleUser = {
@@ -72,31 +72,18 @@ describe('Blog app', () => {
         })
 
         test('a new blog can be created', async ({ page }) => {
-            await page
-                .getByRole('button', { name: 'show blog creation form' })
-                .click()
-            await page.getByRole('textbox', { name: 'title' }).click()
-            await page
-                .getByRole('textbox', { name: 'title' })
-                .fill('new example blog')
-            await page.getByRole('textbox', { name: 'author' }).click()
-            await page
-                .getByRole('textbox', { name: 'author' })
-                .fill('Some Author')
-            await page.getByRole('textbox', { name: 'url' }).click()
-            await page
-                .getByRole('textbox', { name: 'url' })
-                .fill('https://some-example.url/blog')
-            await page.getByRole('button', { name: 'add new blog' }).click()
+            const title = 'new example blog'
+            const author = 'Some Author'
+            const url = 'https://some-example.url/blog'
+
+            await addNewBlog(page, title, author, url)
 
             await expect(
-                page.getByText(
-                    '✅ Added new blog: new example blog - Some Author ✅'
-                )
+                page.getByText(`✅ Added new blog: ${title} - ${author} ✅`)
             ).toBeVisible()
 
             await expect(
-                page.getByText('new example blog - Some Author expand')
+                page.getByText(`${title} - ${author} expand`)
             ).toBeVisible()
 
             await expect(
@@ -105,9 +92,7 @@ describe('Blog app', () => {
 
             await page.getByRole('button', { name: 'expand' }).click()
 
-            await expect(
-                page.getByText('https://some-example.url/blog')
-            ).toBeVisible()
+            await expect(page.getByText(url)).toBeVisible()
             await expect(page.getByText('likes 0 like')).toBeVisible()
             await expect(
                 page.getByText('Added by: Lauretta Erminia')

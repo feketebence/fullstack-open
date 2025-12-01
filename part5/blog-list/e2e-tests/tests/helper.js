@@ -6,4 +6,15 @@ const loginWith = async (page, username, password) => {
     await page.getByRole('button', { name: 'login' }).click()
 }
 
-export { loginWith }
+const addNewBlog = async (page, blogTitle, blogAuthor, blogUrl) => {
+    await page.getByRole('button', { name: 'show blog creation form' }).click()
+    await page.getByRole('textbox', { name: 'title' }).click()
+    await page.getByRole('textbox', { name: 'title' }).fill(blogTitle)
+    await page.getByRole('textbox', { name: 'author' }).click()
+    await page.getByRole('textbox', { name: 'author' }).fill(blogAuthor)
+    await page.getByRole('textbox', { name: 'url' }).click()
+    await page.getByRole('textbox', { name: 'url' }).fill(blogUrl)
+    await page.getByRole('button', { name: 'add new blog' }).click()
+}
+
+export { loginWith, addNewBlog }
