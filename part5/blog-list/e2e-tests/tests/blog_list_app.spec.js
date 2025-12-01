@@ -8,11 +8,19 @@ describe('Blog app', () => {
         password: 'chiaveSuperSegreta'
     }
 
+    const otherExampleUser = {
+        name: 'Livio Lamberto',
+        username: 'lamberto',
+        password: 'chiaveMegaSegreta'
+    }
+
     beforeEach(async ({ page, request }) => {
         await request.post('/api/testing/reset')
-        await request.post('/api/users', {
-            data: exampleUser
-        })
+
+        for (const user of [exampleUser, otherExampleUser])
+            await request.post('/api/users', {
+                data: user
+            })
 
         await page.goto('/')
     })
@@ -123,7 +131,6 @@ describe('Blog app', () => {
                 page
             }) => {
                 await page.getByRole('button', { name: 'expand' }).click()
-                // await page.pause()
 
                 await expect(
                     page.getByRole('button', { name: 'remove' })
@@ -144,6 +151,34 @@ describe('Blog app', () => {
 
                 await expect(
                     page.getByRole('button', { name: 'expand' })
+                ).not.toBeVisible()
+            })
+
+            test('the delete button of the blog is only visible for the user who created the blog', async ({
+                page
+            }) => {
+                await page.getByRole('button', { name: 'expand' }).click()
+
+                await expect(
+                    page.getByRole('button', { name: 'remove' })
+                ).toBeVisible()
+
+                await page.getByRole('button', { name: 'log out' }).click()
+
+                await loginWith(
+                    page,
+                    otherExampleUser.username,
+                    otherExampleUser.password
+                )
+
+                await expect(
+                    page.getByText(`${otherExampleUser.name} is logged in`)
+                ).toBeVisible()
+
+                await page.getByRole('button', { name: 'expand' }).click()
+
+                await expect(
+                    page.getByRole('button', { name: 'remove' })
                 ).not.toBeVisible()
             })
         })
