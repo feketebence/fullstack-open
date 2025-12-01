@@ -202,6 +202,7 @@ describe('Blog app', () => {
                 ).not.toBeVisible()
             })
 
+            // todo: this test is not working, div id grabbing is not reliable
             test('and another blog is added, and the like buttons of the blogs are clicked, then the blogs are ordered in descending order by the number of likes', async ({
                 page
             }) => {
@@ -216,8 +217,6 @@ describe('Blog app', () => {
                     .locator('button:has-text("like")')
                 await firstBlogLikeButton.click()
 
-                await page.pause()
-
                 await addNewBlog(
                     page,
                     secondBlog.title,
@@ -225,21 +224,12 @@ describe('Blog app', () => {
                     secondBlog.url
                 )
 
-                await page.pause()
-
                 await page.getByRole('button', { name: 'expand' }).click()
 
                 // grab both blogs' div container
                 const ids = await page
                     .locator('div.blog')
                     .evaluateAll((divs) => divs.map((d) => d.id))
-
-                console.log(
-                    'ids after clicking the firstBlog like button:',
-                    ids
-                )
-
-                await page.pause()
 
                 const secondBlogLikeButton = page
                     .locator('div.blog')
@@ -251,11 +241,12 @@ describe('Blog app', () => {
                 // clicking the secondBlog's like button
                 await secondBlogLikeButton.click()
 
-                // clicking the secondBlog's like button for the 2nd time
+                // wait until the like button click is rendered for the second blog
                 await expect(
                     page.locator('div.blog').filter({ hasText: 'likes 1' })
                 ).toHaveCount(2)
 
+                // clicking the secondBlog's like button for the 2nd time
                 await secondBlogLikeButton.click()
 
                 await expect(page.getByText('likes 2')).toBeVisible()
@@ -264,14 +255,10 @@ describe('Blog app', () => {
                 const idsAfterClicks = await page
                     .locator('div.blog')
                     .evaluateAll((divs) => divs.map((d) => d.id))
-                console.log(
-                    'idsAfterClicks.reverse():',
-                    idsAfterClicks.reverse()
-                )
 
                 await page.pause()
 
-                expect(ids).toStrictEqual(idsAfterClicks.reverse())
+                expect(ids).toEqual(idsAfterClicks.reverse())
             })
         })
     })
