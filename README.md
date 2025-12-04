@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part5/end_to_end_testing_playwright#controlling-the-state-of-the-database
+Currently at: https://fullstackopen.com/en/part6/flux_architecture_and_redux#forwarding-redux-store-to-various-components
 
 todo:
 
