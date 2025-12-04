@@ -46,6 +46,7 @@ const reducer = (state = initialState, action) => {
     }
 }
 
+// this is an action creator function
 export const voteAnecdote = (id) => {
     return {
         type: 'VOTE',
@@ -53,6 +54,7 @@ export const voteAnecdote = (id) => {
     }
 }
 
+// this is another action creator
 export const createAnecdote = (content) => {
     return {
         type: 'NEW_ANECDOTE',
