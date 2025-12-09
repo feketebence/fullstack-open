@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { current } from '@reduxjs/toolkit'
 
 const initialState = [
     {
@@ -29,7 +30,7 @@ const noteSlice = createSlice({
             })
             // NOTE: mutation is allowed here, because under the hood
             // the Redux Toolkit uses the Immer library to produce a
-            // new, immutable state; based on the mutated state
+            // new, immutable state; based on the state mutated with .push()
         },
 
         toggleImportanceOf(state, action) {
@@ -39,6 +40,10 @@ const noteSlice = createSlice({
                 ...noteToChange,
                 important: !noteToChange.important
             }
+
+            // this is how you can check the state during debugging
+            // TIP: also check out Redux DevTools
+            console.log('current state:', current(state))
 
             return state.map((note) => (note.id !== id ? note : changedNote))
             // NOTE: in the case of this action, the state is not mutated

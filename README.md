@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part6/many_reducers#exercise-6-9
+Currently at: https://fullstackopen.com/en/part6/many_reducers#exercises-6-10-6-13
 
 todo:
 
