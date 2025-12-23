@@ -8,9 +8,13 @@ const Notification = () => {
         marginBottom: 10
     }
 
-    const notification = useSelector(({ notification }) => {
-        return notification
+    const notification = useSelector((state) => {
+        return state.notification
     })
+
+    if (notification === '') {
+        return null
+    }
 
     return <div style={style}>{notification}</div>
 }
