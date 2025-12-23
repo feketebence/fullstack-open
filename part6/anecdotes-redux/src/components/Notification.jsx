@@ -8,15 +8,23 @@ const Notification = () => {
         marginBottom: 10
     }
 
-    const notification = useSelector((state) => {
-        return state.notification
+    const notifications = useSelector((state) => {
+        return state.notifications
     })
 
-    if (notification === '') {
+    if (notifications.length === 0) {
         return null
     }
 
-    return <div style={style}>{notification}</div>
+    return (
+        <>
+            {notifications.map((notification) => (
+                <div style={style} key={notification.id}>
+                    {notification.content}
+                </div>
+            ))}
+        </>
+    )
 }
 
 export default Notification
