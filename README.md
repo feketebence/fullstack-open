@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part6/communicating_with_server_in_a_redux_application#setting-up-json-server
+Currently at: https://fullstackopen.com/en/part6/communicating_with_server_in_a_redux_application#getting-data-from-the-backend
 
 todo:
 
