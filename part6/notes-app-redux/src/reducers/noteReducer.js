@@ -1,20 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { current } from '@reduxjs/toolkit'
 
-const generateId = () => Number((Math.random() * 1000000).toFixed(0))
-
 const noteSlice = createSlice({
     name: 'notes',
     initialState: [],
     reducers: {
         createNote(state, action) {
-            const content = action.payload
-
-            state.push({
-                id: generateId(),
-                content,
-                important: false
-            })
+            state.push(action.payload)
             // NOTE: mutation is allowed here, because under the hood
             // the Redux Toolkit uses the Immer library to produce a
             // new, immutable state; based on the state mutated with .push()
