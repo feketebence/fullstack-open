@@ -4,7 +4,7 @@ import {
     addNotification,
     removeNotification
 } from '../reducers/notificationReducer'
-import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { increaseAnecdoteVote } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
     const dispatch = useDispatch()
@@ -19,7 +19,7 @@ const AnecdoteList = () => {
     })
 
     const handleVote = (anecdote) => {
-        dispatch(voteAnecdote(anecdote.id))
+        dispatch(increaseAnecdoteVote(anecdote.id))
         dispatch(addNotification(`You voted "${anecdote.content}"`))
 
         setTimeout(() => {
