@@ -5,15 +5,20 @@ const App = () => {
     const queryClient = useQueryClient()
     const newNoteMutation = useMutation({
         mutationFn: createNote,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['notes'] })
+        onSuccess: (newNote) => {
+            const notes = queryClient.getQueryData(['notes'])
+            queryClient.setQueryData(['notes'], notes.concat(newNote))
         }
     })
 
     const updateNoteMutation = useMutation({
         mutationFn: updateNote,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['notes'] })
+        onSuccess: (updatedNote) => {
+            const notes = queryClient.getQueryData(['notes'])
+            const updatedNotes = notes.map((note) =>
+                note.id === updatedNote.id ? updatedNote : note
+            )
+            queryClient.setQueryData(['notes'], updatedNotes)
         }
     })
 
