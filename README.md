@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part6/react_query_use_reducer_and_the_context#managing-data-on-the-server-with-the-react-query-library
+Currently at: https://fullstackopen.com/en/part7/react_router#application-navigation-structure
 
 todo:
 
