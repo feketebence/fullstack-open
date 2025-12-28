@@ -3,6 +3,7 @@ import CounterContext from '../CounterContext'
 
 const Display = () => {
     const { counter } = useContext(CounterContext)
+
     return <div>{counter}</div>
 }
 
