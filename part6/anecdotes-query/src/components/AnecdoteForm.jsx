@@ -16,6 +16,17 @@ const AnecdoteForm = () => {
                 ['anecdotes'],
                 anecdotes.concat(newAnecdote)
             )
+
+            notificationsDispatch({
+                type: 'addSuccess',
+                payload: newAnecdote.content
+            })
+        },
+        onError: (error) => {
+            notificationsDispatch({
+                type: 'addError',
+                payload: error.message
+            })
         }
     })
 
@@ -23,16 +34,10 @@ const AnecdoteForm = () => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-        console.log(`Adding new anecdote with content: ${content}`)
 
         newAnecdoteMutation.mutate({
             content,
             votes: 0
-        })
-
-        notificationsDispatch({
-            type: 'add',
-            payload: content
         })
 
         setTimeout(() => {

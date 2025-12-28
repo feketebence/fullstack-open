@@ -22,10 +22,6 @@ const App = () => {
     })
 
     const handleVote = (anecdote) => {
-        console.log(
-            `Voting for anecdote with id '${anecdote.id}' and content '${anecdote.content}'`
-        )
-
         updateAnecdoteMutation.mutate({
             ...anecdote,
             votes: anecdote.votes + 1
