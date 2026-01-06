@@ -88,7 +88,7 @@ const CreateNew = ({ onCreate, setNotification }) => {
             votes: 0
         })
         navigate('/anecdotes')
-        setNotification(`a new anecdote '${content.value}' created!`)
+        setNotification(`A new anecdote '${content.value}' created!`)
     }
 
     const handleReset = (e) => {
