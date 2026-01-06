@@ -74,9 +74,9 @@ const Footer = () => (
 const CreateNew = ({ onCreate, setNotification }) => {
     const navigate = useNavigate()
 
-    const content = useField('text', 'content')
-    const author = useField('text', 'author')
-    const info = useField('text', 'info')
+    const { onReset: onContentReset, ...content } = useField('text', 'content')
+    const { onReset: onAuthorReset, ...author } = useField('text', 'author')
+    const { onReset: onInfoReset, ...info } = useField('text', 'info')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -89,6 +89,14 @@ const CreateNew = ({ onCreate, setNotification }) => {
         })
         navigate('/anecdotes')
         setNotification(`a new anecdote '${content.value}' created!`)
+    }
+
+    const handleReset = (e) => {
+        e.preventDefault()
+
+        onContentReset()
+        onAuthorReset()
+        onInfoReset()
     }
 
     return (
@@ -105,6 +113,7 @@ const CreateNew = ({ onCreate, setNotification }) => {
                     url for more info <input {...info} />
                 </div>
                 <button>create</button>
+                <button onClick={handleReset}>reset</button>
             </form>
         </div>
     )
