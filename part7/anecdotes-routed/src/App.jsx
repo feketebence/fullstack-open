@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, Route, Routes, useMatch, useNavigate } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = () => {
     const padding = {
@@ -73,20 +74,21 @@ const Footer = () => (
 const CreateNew = ({ onCreate, setNotification }) => {
     const navigate = useNavigate()
 
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
+    const content = useField('text', 'content')
+    const author = useField('text', 'author')
+    const info = useField('text', 'info')
 
     const handleSubmit = (e) => {
         e.preventDefault()
+
         onCreate({
-            content,
-            author,
-            info,
+            content: content.value,
+            author: author.value,
+            info: info.value,
             votes: 0
         })
         navigate('/anecdotes')
-        setNotification(`a new anecdote '${content}' created!`)
+        setNotification(`a new anecdote '${content.value}' created!`)
     }
 
     return (
@@ -94,28 +96,13 @@ const CreateNew = ({ onCreate, setNotification }) => {
             <h2>create a new anecdote</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    content
-                    <input
-                        name="content"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    />
+                    content <input {...content} />
                 </div>
                 <div>
-                    author
-                    <input
-                        name="author"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
-                    />
+                    author <input {...author} />
                 </div>
                 <div>
-                    url for more info
-                    <input
-                        name="info"
-                        value={info}
-                        onChange={(e) => setInfo(e.target.value)}
-                    />
+                    url for more info <input {...info} />
                 </div>
                 <button>create</button>
             </form>
