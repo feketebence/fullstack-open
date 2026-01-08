@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import Button from './primitives/Button'
+import Input from './primitives/Input'
 
 const Login = (props) => {
     const navigate = useNavigate()
@@ -14,12 +16,12 @@ const Login = (props) => {
             <h2>login</h2>
             <form onSubmit={onSubmit}>
                 <div>
-                    username: <input type="text" />
+                    username: <Input type="text" />
                 </div>
                 <div>
-                    password: <input type="password" />
+                    password: <Input type="password" />
                 </div>
-                <button type="submit">login</button>
+                <Button type="submit">login</Button>
             </form>
         </div>
     )

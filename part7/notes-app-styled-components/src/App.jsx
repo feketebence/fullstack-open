@@ -6,6 +6,9 @@ import Users from './components/Users'
 import Home from './components/Home'
 import Note from './components/Note'
 import Login from './components/Login'
+import Footer from './components/primitives/Footer'
+import Page from './components/primitives/Page'
+import Navigation from './components/primitives/Navigation'
 
 const App = () => {
     const padding = {
@@ -51,10 +54,10 @@ const App = () => {
         : null
 
     return (
-        <div>
+        <Page>
             {message && <div>{message}</div>}
 
-            <div>
+            <Navigation>
                 <Link style={padding} to="/">
                     home
                 </Link>
@@ -71,7 +74,7 @@ const App = () => {
                         login
                     </Link>
                 )}
-            </div>
+            </Navigation>
 
             <Routes>
                 <Route path="/notes/:id" element={<Note note={note} />} />
@@ -85,11 +88,11 @@ const App = () => {
                 <Route path="/login" element={<Login onLogin={login} />} />
                 <Route path="/" element={<Home />} />
             </Routes>
-            <div>
+            <Footer>
                 <br />
                 <em>Note app, Department of Computer Science 2023</em>
-            </div>
-        </div>
+            </Footer>
+        </Page>
     )
 }
 
