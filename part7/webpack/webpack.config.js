@@ -21,6 +21,11 @@ const config = () => {
                     use: ['style-loader', 'css-loader']
                 }
             ]
+        },
+        devServer: {
+            static: path.resolve(__dirname, 'build'),
+            compress: true,
+            port: 3000
         }
     }
 }
