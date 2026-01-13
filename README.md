@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part7/webpack#source-maps
+Currently at: https://fullstackopen.com/en/part7/class_components_miscellaneous#class-components
 
 todo:
 
