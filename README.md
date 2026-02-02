@@ -4,10 +4,10 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part7/class_components_miscellaneous#class-components
+Currently at: https://fullstackopen.com/en/part7/class_components_miscellaneous#react-node-application-security
 
 todo:
 
--   [Exercises 2-18, 2-19 and 2-20](https://fullstackopen.com/en/part2/adding_styles_to_react_app#exercises-2-18-2-20)
+- [Exercises 2-18, 2-19 and 2-20](https://fullstackopen.com/en/part2/adding_styles_to_react_app#exercises-2-18-2-20)
 
--   [Exercises 4-20, 4-21, 4-22 and 4-23](https://fullstackopen.com/en/part4/token_authentication#exercises-4-15-4-23)
+- [Exercises 4-20, 4-21, 4-22 and 4-23](https://fullstackopen.com/en/part4/token_authentication#exercises-4-15-4-23)
