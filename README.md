@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part7/class_components_miscellaneous#react-node-application-security
+Currently at: https://fullstackopen.com/en/part7/exercises_extending_the_bloglist#exercises-7-9-7-21
 
 todo:
 
