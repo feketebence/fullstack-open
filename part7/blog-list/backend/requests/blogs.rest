@@ -1,0 +1,41 @@
+### Create a new blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNvbWVvbmUiLCJpZCI6IjY5MjQzYzg1ZTQ3ZTJhNWRkYjBiZDc5ZSIsImlhdCI6MTc2Mzk4MjcyNiwiZXhwIjoxNzYzOTg2MzI2fQ.4CVjvCxe-IP4ciItrw6Pb-Z7lXQcJEC7d8fIYaEQMc0
+
+{
+    "title": "third blog",
+    "author": "somebody else",
+    "url": "A URL goes here",
+    "likes": 13
+}
+
+### Attempt to create an invalid blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "author": "somebody else",
+    "url": "A URL goes here",
+    "likes": 13
+}
+
+### Get all the blogs
+GET http://localhost:3001/api/blogs
+
+### Get a specific blog
+GET http://localhost:3001/api/blogs/692427882fb75ee73415225a
+
+### Delete a specific blog
+DELETE http://localhost:3001/api/blogs/69242f5243075b6f08ca0d01
+
+### Update an existing blog
+PUT http://localhost:3001/api/blogs/5a422aa71b54a676234d17f8
+Content-Type: application/json
+
+{
+    "title": "go-to statement considered mega harmful",
+    "author": "somebody else than Dijkstra",
+    "url": "http://url.io",
+    "likes": 53
+}
