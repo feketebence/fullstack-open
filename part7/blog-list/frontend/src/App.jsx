@@ -1,21 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-import Notification from './components/Notification'
+import { useDispatch } from 'react-redux'
+
+import { setNotification } from './reducers/notificationReducer'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
+
+import Blog from './components/Blog'
+import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
-    const [message, setMessage] = useState(null)
-    const [notificationType, setNotificationType] = useState(null)
 
     const blogFormRef = useRef()
 
     const [user, setUser] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -46,18 +51,14 @@ const App = () => {
             blogService.setToken(user.token)
             setUser(user)
 
-            setMessage('logged in successfully')
-            setNotificationType('success')
-            setTimeout(() => {
-                setMessage(null)
-            }, 3000)
+            dispatch(
+                setNotification(
+                    `${user.name} logged in successfully.`,
+                    'success'
+                )
+            )
         } catch {
-            setMessage('wrong credentials')
-            setNotificationType('error')
-            setTimeout(() => {
-                setMessage(null)
-                setNotificationType(null)
-            }, 5000)
+            dispatch(setNotification('wrong credentials', 'error'))
         }
     }
 
@@ -82,15 +83,20 @@ const App = () => {
 
             // replace the old object with the updated one
             const nextBlogs = blogs.map((b) => (b.id === id ? updatedBlog : b))
-
+            dispatch(
+                setNotification(
+                    `Blog "${blog.title} - ${blog.author}" liked`,
+                    'success'
+                )
+            )
             setBlogs(nextBlogs)
         } catch {
-            setMessage(
-                `Blog "${blog.title} - ${blog.author}" was already removed from the server`
+            dispatch(
+                setNotification(
+                    `Blog "${blog.title} - ${blog.author}" was already removed from the server`,
+                    'error'
+                )
             )
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
 
             const nextBlogs = blogs.filter((n) => n.id !== id)
             setBlogs(nextBlogs)
@@ -112,21 +118,19 @@ const App = () => {
             const nextBlogs = blogs.filter((b) => b.id !== selectedBlog.id)
             setBlogs(nextBlogs)
 
-            setMessage(
-                `Successfully deleted blog "${selectedBlog.title} - ${selectedBlog.author}"`
+            dispatch(
+                setNotification(
+                    `Successfully deleted blog "${selectedBlog.title} - ${selectedBlog.author}"`,
+                    'success'
+                )
             )
-            setNotificationType('success')
-
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
         } catch {
-            setMessage(
-                `Error occurred during deleting blog "${selectedBlog.title} - ${selectedBlog.author}"`
+            dispatch(
+                setNotification(
+                    `Error occurred during deleting blog "${selectedBlog.title} - ${selectedBlog.author}"`,
+                    'error'
+                )
             )
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
         }
     }
 
@@ -148,20 +152,16 @@ const App = () => {
 
             setBlogs(blogs.concat(createdBlogWithUser))
 
-            setMessage(
-                `Added new blog: ${createdBlogWithUser.title} - ${createdBlogWithUser.author}`
+            dispatch(
+                setNotification(
+                    `Added new blog: ${createdBlogWithUser.title} - ${createdBlogWithUser.author}`,
+                    'success'
+                )
             )
-            setNotificationType('success')
-            setTimeout(() => {
-                setMessage(null)
-                setNotificationType(null)
-            }, 5000)
         } catch {
-            setMessage('error during creation of new blog')
-            setNotificationType('error')
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
+            dispatch(
+                setNotification('Error during creation of new blog', 'error')
+            )
         }
     }
 
@@ -169,7 +169,7 @@ const App = () => {
         return (
             <div className="container">
                 <h2>Login</h2>
-                <Notification message={message} type={notificationType} />
+                <Notification />
 
                 <form onSubmit={handleLogin}>
                     <div>
@@ -208,7 +208,7 @@ const App = () => {
             <p>{user.name} is logged in</p>
             <button onClick={handleLogout}>log out</button>
 
-            <Notification message={message} type={notificationType} />
+            <Notification />
 
             <br />
             <hr />

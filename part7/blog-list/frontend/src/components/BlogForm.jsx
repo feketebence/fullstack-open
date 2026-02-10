@@ -5,7 +5,7 @@ const BlogForm = ({ addBlogFn }) => {
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
 
-    const handleAddBlog = (event) => {
+    const addBlog = async (event) => {
         event.preventDefault()
 
         addBlogFn({
@@ -22,7 +22,7 @@ const BlogForm = ({ addBlogFn }) => {
     return (
         <div>
             <h3>Add new blog</h3>
-            <form onSubmit={handleAddBlog}>
+            <form onSubmit={addBlog}>
                 <div>
                     <label>
                         title{' '}
