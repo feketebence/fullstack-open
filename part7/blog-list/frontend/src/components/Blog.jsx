@@ -1,14 +1,21 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, user, onLikeClick, onRemoveClick }) => {
+const Blog = ({ blog, user }) => {
     const [expanded, setExpanded] = useState(false)
-
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
         border: 'solid',
         borderWidth: 1,
         marginBottom: 5
+    }
+
+    const handleLikeClick = () => {
+        console.log(`todo: increase likes of blog with id ${blog.id}`)
+    }
+
+    const handleRemoveClick = () => {
+        console.log(`todo: handle the deletion of blog with id ${blog.id}`)
     }
 
     return (
@@ -23,11 +30,11 @@ const Blog = ({ blog, user, onLikeClick, onRemoveClick }) => {
                     <p>{blog.url}</p>
                     <p>
                         likes {blog.likes}{' '}
-                        <button onClick={onLikeClick}>like</button>
+                        <button onClick={handleLikeClick}>like</button>
                     </p>
                     <p>Added by: {blog.user.name}</p>
                     {user.username === blog.user.username && (
-                        <button onClick={onRemoveClick}>remove</button>
+                        <button onClick={handleRemoveClick}>remove</button>
                     )}
                 </>
             )}

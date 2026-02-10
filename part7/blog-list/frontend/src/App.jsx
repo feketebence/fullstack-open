@@ -6,10 +6,11 @@ import { setNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import BlogList from './components/BlogList'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -25,6 +26,10 @@ const App = () => {
     useEffect(() => {
         blogService.getAll().then((blogs) => setBlogs(blogs))
     }, [])
+
+    useEffect(() => {
+        dispatch(initializeBlogs())
+    }, [dispatch])
 
     useEffect(() => {
         const loggedInUserJSON = window.localStorage.getItem(
@@ -70,69 +75,69 @@ const App = () => {
         setUser(null)
     }
 
-    const handleLikeClick = async (id) => {
-        const blog = blogs.find((b) => b.id === id)
+    // const handleLikeClick = async (id) => {
+    //     const blog = blogs.find((b) => b.id === id)
 
-        const newBlog = {
-            ...blog,
-            likes: blog.likes + 1
-        }
+    //     const newBlog = {
+    //         ...blog,
+    //         likes: blog.likes + 1
+    //     }
 
-        try {
-            const updatedBlog = await blogService.update(id, newBlog)
+    //     try {
+    //         const updatedBlog = await blogService.update(id, newBlog)
 
-            // replace the old object with the updated one
-            const nextBlogs = blogs.map((b) => (b.id === id ? updatedBlog : b))
-            dispatch(
-                setNotification(
-                    `Blog "${blog.title} - ${blog.author}" liked`,
-                    'success'
-                )
-            )
-            setBlogs(nextBlogs)
-        } catch {
-            dispatch(
-                setNotification(
-                    `Blog "${blog.title} - ${blog.author}" was already removed from the server`,
-                    'error'
-                )
-            )
+    //         // replace the old object with the updated one
+    //         const nextBlogs = blogs.map((b) => (b.id === id ? updatedBlog : b))
+    //         dispatch(
+    //             setNotification(
+    //                 `Blog "${blog.title} - ${blog.author}" liked`,
+    //                 'success'
+    //             )
+    //         )
+    //         setBlogs(nextBlogs)
+    //     } catch {
+    //         dispatch(
+    //             setNotification(
+    //                 `Blog "${blog.title} - ${blog.author}" was already removed from the server`,
+    //                 'error'
+    //             )
+    //         )
 
-            const nextBlogs = blogs.filter((n) => n.id !== id)
-            setBlogs(nextBlogs)
-        }
-    }
+    //         const nextBlogs = blogs.filter((n) => n.id !== id)
+    //         setBlogs(nextBlogs)
+    //     }
+    // }
 
-    const handleRemoveClick = async (id) => {
-        const selectedBlog = blogs.find((b) => b.id === id)
+    // const handleRemoveClick = async (id) => {
+    //     const selectedBlog = blogs.find((b) => b.id === id)
 
-        const deleteConfirmed = window.confirm(
-            `You are going to delete blog ${selectedBlog.title} by ${selectedBlog.author}`
-        )
-        if (!deleteConfirmed) {
-            return
-        }
+    //     const deleteConfirmed = window.confirm(
+    //         `You are going to delete blog ${selectedBlog.title} by ${selectedBlog.author}`
+    //     )
+    //     if (!deleteConfirmed) {
+    //         return
+    //     }
 
-        try {
-            await blogService.deleteBlog(selectedBlog)
-            const nextBlogs = blogs.filter((b) => b.id !== selectedBlog.id)
-            setBlogs(nextBlogs)
+    //     try {
+    //         await blogService.deleteBlog(selectedBlog)
+    //         const nextBlogs = blogs.filter((b) => b.id !== selectedBlog.id)
+    //         setBlogs(nextBlogs)
 
-            dispatch(
-                setNotification(
-                    `Successfully deleted blog "${selectedBlog.title} - ${selectedBlog.author}"`,
-                    'success'
-                )
-            )
-        } catch {
-            dispatch(
-                setNotification(
-                    `Error occurred during deleting blog "${selectedBlog.title} - ${selectedBlog.author}"`,
-                    'error'
-                )
-            )
-        }
-    }
+    //         dispatch(
+    //             setNotification(
+    //                 `Successfully deleted blog "${selectedBlog.title} - ${selectedBlog.author}"`,
+    //                 'success'
+    //             )
+    //         )
+    //     } catch {
+    //         dispatch(
+    //             setNotification(
+    //                 `Error occurred during deleting blog "${selectedBlog.title} - ${selectedBlog.author}"`,
+    //                 'error'
+    //             )
+    //         )
+    //     }
+    // }
 
     const addBlog = async (blogObject) => {
         try {
@@ -207,12 +212,9 @@ const App = () => {
             <h2>blogs</h2>
             <p>{user.name} is logged in</p>
             <button onClick={handleLogout}>log out</button>
-
             <Notification />
-
             <br />
             <hr />
-
             <Togglable
                 revealButtonLabel="show blog creation form"
                 hideButtonLabel="close blog creation form"
@@ -220,21 +222,8 @@ const App = () => {
             >
                 <BlogForm addBlogFn={addBlog} />
             </Togglable>
-
             <br />
-
-            {blogs
-                .sort((a, b) => a.likes - b.likes)
-                .reverse()
-                .map((blog) => (
-                    <Blog
-                        key={blog.id}
-                        blog={blog}
-                        user={user}
-                        onLikeClick={() => handleLikeClick(blog.id)}
-                        onRemoveClick={() => handleRemoveClick(blog.id)}
-                    />
-                ))}
+            <BlogList user={user} />
         </div>
     )
 }
