@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { increaseBlogLikes } from '../reducers/blogReducer'
+import { increaseBlogLikes, removeBlog } from '../reducers/blogReducer'
 
 const Blog = ({ blog, user }) => {
     const [expanded, setExpanded] = useState(false)
@@ -20,7 +20,7 @@ const Blog = ({ blog, user }) => {
     }
 
     const handleRemoveClick = () => {
-        console.log(`todo: handle the deletion of blog with id ${blog.id}`)
+        dispatch(removeBlog(blog))
     }
 
     return (

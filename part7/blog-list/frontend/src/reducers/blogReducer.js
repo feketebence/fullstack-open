@@ -9,6 +9,10 @@ const blogSlice = createSlice({
         createBlog(state, action) {
             state.push(action.payload)
         },
+        deleteBlog(state, action) {
+            const deletedBlog = action.payload
+            return state.filter((blog) => blog.id !== deletedBlog.id)
+        },
         likeBlog(state, action) {
             const changedBlog = action.payload
 
@@ -22,12 +26,49 @@ const blogSlice = createSlice({
     }
 })
 
-const { createBlog, likeBlog, setBlogs } = blogSlice.actions
+const { createBlog, deleteBlog, likeBlog, setBlogs } = blogSlice.actions
 
-export const appendBlog = (content) => {
+export const appendBlog = (blog) => {
     return async (dispatch) => {
-        const newBlog = await blogService.create(content)
-        dispatch(createBlog(newBlog))
+        try {
+            const newBlog = await blogService.create(blog)
+            dispatch(createBlog(newBlog))
+            dispatch(
+                setNotification(
+                    `Blog "${blog.title} - ${blog.author}" created successfully!`,
+                    'success'
+                )
+            )
+        } catch {
+            dispatch(
+                setNotification(
+                    `Error occurred during creation of blog "${blog.title} - ${blog.author}".`,
+                    'error'
+                )
+            )
+        }
+    }
+}
+
+export const removeBlog = (blog) => {
+    return async (dispatch) => {
+        try {
+            await blogService.deleteBlog(blog)
+            dispatch(deleteBlog(blog))
+            dispatch(
+                setNotification(
+                    `Blog "${blog.title} - ${blog.author}" deleted successfully!`,
+                    'success'
+                )
+            )
+        } catch {
+            dispatch(
+                setNotification(
+                    `Error occurred during deletion of blog "${blog.title} - ${blog.author}".`,
+                    'error'
+                )
+            )
+        }
     }
 }
 
@@ -36,6 +77,12 @@ export const increaseBlogLikes = (blog) => {
         try {
             const updatedBlog = await blogService.increaseLikes(blog.id)
             dispatch(likeBlog(updatedBlog))
+            dispatch(
+                setNotification(
+                    `Blog "${blog.title} - ${blog.author}" liked!`,
+                    'success'
+                )
+            )
         } catch {
             dispatch(
                 setNotification(
@@ -51,8 +98,12 @@ export const increaseBlogLikes = (blog) => {
 
 export const initializeBlogs = () => {
     return async (dispatch) => {
-        const initialBlogs = await blogService.getAll()
-        dispatch(setBlogs(initialBlogs))
+        try {
+            const initialBlogs = await blogService.getAll()
+            dispatch(setBlogs(initialBlogs))
+        } catch {
+            dispatch(setNotification('Could not initialize blogs', 'error'))
+        }
     }
 }
 
