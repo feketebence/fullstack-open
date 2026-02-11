@@ -62,7 +62,12 @@ blogsRouter.post('/', async (request, response) => {
         `User '${user.name}' created new blog with title '${blog.title}'`
     )
 
-    response.status(201).json(savedBlog)
+    const populatedBlog = await savedBlog.populate('user', {
+        name: 1,
+        username: 1
+    })
+
+    response.status(201).json(populatedBlog)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
