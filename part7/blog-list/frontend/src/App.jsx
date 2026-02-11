@@ -68,7 +68,6 @@ const App = () => {
             </Togglable>
             <br />
             <BlogList user={currentUser} />
-            loggedInBlogListAppUser
         </div>
     )
 }
