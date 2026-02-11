@@ -26,20 +26,15 @@ const App = () => {
     }, [currentUser, dispatch])
 
     useEffect(() => {
-        console.log('effect running for checking current user in cookies')
-
         const currentUser = localStorage.loadCurrentUser()
-        if (currentUser) {
-            console.log('user is found in cookies')
 
+        if (currentUser) {
             dispatch(setCurrentUser(currentUser))
             blogService.setToken(currentUser.token)
         }
     }, [dispatch])
 
     const handleLogout = (event) => {
-        console.log('handling logout')
-
         event.preventDefault()
 
         localStorage.removeCurrentUser()
