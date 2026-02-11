@@ -22,7 +22,12 @@ blogsRouter.get('/:id', async (request, response) => {
     const blog = await Blog.findById(request.params.id)
 
     if (blog) {
-        const populatedBlog = blog.populate('user', { username: 1, name: 1 })
+        const populatedBlog = await blog.populate('user', {
+            username: 1,
+            name: 1
+        })
+        console.log('populatedBlog:', populatedBlog)
+
         response.json(populatedBlog)
     } else {
         response.status(404).end()
