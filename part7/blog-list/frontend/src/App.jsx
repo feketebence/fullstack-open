@@ -1,75 +1,69 @@
 import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-
-import { setNotification } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 import blogService from './services/blogs'
-import loginService from './services/login'
 
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import { initializeBlogs } from './reducers/blogReducer'
+import {
+    login,
+    setCurrentUser,
+    unsetCurrentUser
+} from './reducers/currentUserReducer'
 
 const App = () => {
     const blogFormRef = useRef()
 
-    const [user, setUser] = useState(null)
+    const currentUser = useSelector((state) => state.currentUser)
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(initializeBlogs())
-    }, [dispatch])
+        if (currentUser) {
+            dispatch(initializeBlogs())
+        }
+    }, [currentUser, dispatch])
 
     useEffect(() => {
+        console.log('effect running for checking current user in cookies')
+
         const loggedInUserJSON = window.localStorage.getItem(
-            'loggedBlogListAppUser'
+            'loggedInBlogListAppUser'
         )
 
         if (loggedInUserJSON) {
+            console.log('user is found in cookies')
+
             const user = JSON.parse(loggedInUserJSON)
-            setUser(user)
+            dispatch(setCurrentUser(user))
             blogService.setToken(user.token)
         }
-    }, [])
+    }, [dispatch])
 
     const handleLogin = async (event) => {
+        console.log('handling login')
+
         event.preventDefault()
-
-        try {
-            const user = await loginService.login({ username, password })
-
-            window.localStorage.setItem(
-                'loggedBlogListAppUser',
-                JSON.stringify(user)
-            )
-            blogService.setToken(user.token)
-            setUser(user)
-
-            dispatch(
-                setNotification(
-                    `${user.name} logged in successfully.`,
-                    'success'
-                )
-            )
-        } catch {
-            dispatch(setNotification('wrong credentials', 'error'))
-        }
+        dispatch(login({ username, password }))
     }
 
     const handleLogout = (event) => {
+        console.log('handling logout')
+
         event.preventDefault()
 
-        window.localStorage.removeItem('loggedBlogListAppUser')
+        window.localStorage.removeItem('loggedInBlogListAppUser')
         blogService.setToken(null)
-        setUser(null)
+        dispatch(unsetCurrentUser())
     }
 
-    if (user === null) {
+    if (currentUser === null) {
         return (
             <div className="container">
                 <h2>Login</h2>
@@ -78,7 +72,7 @@ const App = () => {
                 <form onSubmit={handleLogin}>
                     <div>
                         <label>
-                            username{' '}
+                            username user
                             <input
                                 type="text"
                                 value={username}
@@ -109,7 +103,7 @@ const App = () => {
     return (
         <div>
             <h2>blogs</h2>
-            <p>{user.name} is logged in</p>
+            <p>{currentUser.name} is logged in</p>
             <button onClick={handleLogout}>log out</button>
             <Notification />
             <br />
@@ -122,7 +116,7 @@ const App = () => {
                 <BlogForm />
             </Togglable>
             <br />
-            <BlogList user={user} />
+            <BlogList user={currentUser} />
         </div>
     )
 }
