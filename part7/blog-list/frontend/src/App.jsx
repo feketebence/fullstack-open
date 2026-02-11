@@ -2,14 +2,16 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import blogService from './services/blogs'
+import localStorage from './services/localStorage'
 
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
+import LoginForm from './components/LoginForm'
+
 import { initializeBlogs } from './reducers/blogReducer'
 import { setCurrentUser, unsetCurrentUser } from './reducers/currentUserReducer'
-import LoginForm from './components/LoginForm'
 
 const App = () => {
     const blogFormRef = useRef()
@@ -26,16 +28,12 @@ const App = () => {
     useEffect(() => {
         console.log('effect running for checking current user in cookies')
 
-        const loggedInUserJSON = window.localStorage.getItem(
-            'loggedInBlogListAppUser'
-        )
-
-        if (loggedInUserJSON) {
+        const currentUser = localStorage.loadCurrentUser()
+        if (currentUser) {
             console.log('user is found in cookies')
 
-            const user = JSON.parse(loggedInUserJSON)
-            dispatch(setCurrentUser(user))
-            blogService.setToken(user.token)
+            dispatch(setCurrentUser(currentUser))
+            blogService.setToken(currentUser.token)
         }
     }, [dispatch])
 
@@ -44,7 +42,7 @@ const App = () => {
 
         event.preventDefault()
 
-        window.localStorage.removeItem('loggedInBlogListAppUser')
+        localStorage.removeCurrentUser()
         blogService.setToken(null)
         dispatch(unsetCurrentUser())
     }
@@ -70,6 +68,7 @@ const App = () => {
             </Togglable>
             <br />
             <BlogList user={currentUser} />
+            loggedInBlogListAppUser
         </div>
     )
 }
