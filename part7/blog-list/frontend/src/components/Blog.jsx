@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { increaseBlogLikes } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Blog = ({ blog, user }) => {
     const [expanded, setExpanded] = useState(false)
@@ -10,8 +14,16 @@ const Blog = ({ blog, user }) => {
         marginBottom: 5
     }
 
+    const dispatch = useDispatch()
+
     const handleLikeClick = () => {
-        console.log(`todo: increase likes of blog with id ${blog.id}`)
+        dispatch(increaseBlogLikes(blog.id))
+        dispatch(
+            setNotification(
+                `Blog "${blog.title} - ${blog.author}" liked.`,
+                'success'
+            )
+        )
     }
 
     const handleRemoveClick = () => {
