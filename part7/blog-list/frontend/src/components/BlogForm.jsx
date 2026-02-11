@@ -1,18 +1,24 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { appendBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ addBlogFn }) => {
+const BlogForm = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
 
-    const addBlog = async (event) => {
+    const dispatch = useDispatch()
+
+    const handleAddBlog = async (event) => {
         event.preventDefault()
 
-        addBlogFn({
+        const newBlog = {
             title,
             author,
             url
-        })
+        }
+
+        dispatch(appendBlog(newBlog))
 
         setTitle('')
         setAuthor('')
@@ -22,7 +28,7 @@ const BlogForm = ({ addBlogFn }) => {
     return (
         <div>
             <h3>Add new blog</h3>
-            <form onSubmit={addBlog}>
+            <form onSubmit={handleAddBlog}>
                 <div>
                     <label>
                         title{' '}

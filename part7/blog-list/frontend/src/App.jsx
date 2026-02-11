@@ -13,8 +13,6 @@ import BlogList from './components/BlogList'
 import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
-
     const blogFormRef = useRef()
 
     const [user, setUser] = useState(null)
@@ -22,10 +20,6 @@ const App = () => {
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        blogService.getAll().then((blogs) => setBlogs(blogs))
-    }, [])
 
     useEffect(() => {
         dispatch(initializeBlogs())
@@ -139,37 +133,6 @@ const App = () => {
     //     }
     // }
 
-    const addBlog = async (blogObject) => {
-        try {
-            blogFormRef.current.toggleVisibility()
-            const createdBlog = await blogService.create(blogObject)
-
-            // add the creator user's data to the newly created blog
-            // NOTE: this should be done on the backend, but I don't
-            // know how to populate a newly saved blog object
-            const createdBlogWithUser = {
-                ...createdBlog,
-                user: {
-                    name: user.name,
-                    username: user.username
-                }
-            }
-
-            setBlogs(blogs.concat(createdBlogWithUser))
-
-            dispatch(
-                setNotification(
-                    `Added new blog: ${createdBlogWithUser.title} - ${createdBlogWithUser.author}`,
-                    'success'
-                )
-            )
-        } catch {
-            dispatch(
-                setNotification('Error during creation of new blog', 'error')
-            )
-        }
-    }
-
     if (user === null) {
         return (
             <div className="container">
@@ -220,7 +183,7 @@ const App = () => {
                 hideButtonLabel="close blog creation form"
                 ref={blogFormRef}
             >
-                <BlogForm addBlogFn={addBlog} />
+                <BlogForm />
             </Togglable>
             <br />
             <BlogList user={user} />
