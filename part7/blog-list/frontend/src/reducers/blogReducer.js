@@ -27,6 +27,12 @@ const blogSlice = createSlice({
     }
 })
 
+// NOTE: this reducer is really slow, because the state structure is array based.
+//  Object based state structure is much faster. Also, re-renders should be avoided.
+// For more info:
+//  https://redux-toolkit.js.org/usage/usage-guide#managing-normalized-data
+//  https://redux.js.org/style-guide/
+
 const { createBlog, deleteBlog, updateBlog, setBlogs } = blogSlice.actions
 
 export const appendBlog = (blog) => {
