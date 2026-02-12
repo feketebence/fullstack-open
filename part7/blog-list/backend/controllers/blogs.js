@@ -13,6 +13,24 @@ const getTokenFromClientRequest = (request) => {
     return null
 }
 
+const getAndCheckUser = async (request, response) => {
+    const tokenFromRequest = getTokenFromClientRequest(request)
+    const decodedToken = jwt.verify(tokenFromRequest, process.env.SECRET)
+
+    if (!decodedToken.id) {
+        // if the token does not contain the user's identity (decodedToken.id is undefined)
+        return response.status(401).json({ error: 'invalid token' })
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    if (!user) {
+        return response.status(400).json({ error: 'userId missing or invalid' })
+    }
+
+    return user
+}
+
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
     response.json(blogs)
@@ -37,19 +55,7 @@ blogsRouter.get('/:id', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
     const body = request.body
 
-    const tokenFromRequest = getTokenFromClientRequest(request)
-    const decodedToken = jwt.verify(tokenFromRequest, process.env.SECRET)
-
-    if (!decodedToken.id) {
-        // if the token does not contain the user's identity (decodedToken.id is undefined)
-        return response.status(401).json({ error: 'invalid token' })
-    }
-
-    const user = await User.findById(decodedToken.id)
-
-    if (!user) {
-        return response.status(400).json({ error: 'userId missing or invalid' })
-    }
+    const user = await getAndCheckUser(request, response)
 
     const blog = new Blog({
         title: body.title,
@@ -76,40 +82,21 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-    const tokenFromRequest = getTokenFromClientRequest(request)
-    const decodedToken = jwt.verify(tokenFromRequest, process.env.SECRET)
-
-    if (!decodedToken.id) {
-        // if the token does not contain the user's identity (decodedToken.id is undefined)
-        return response.status(401).json({ error: 'invalid token' })
-    }
-
-    const user = await User.findById(decodedToken.id)
-
-    if (!user) {
-        return response.status(400).json({ error: 'userId missing or invalid' })
-    }
+    const user = await getAndCheckUser(request, response)
 
     // todo: only allow the deletion if the blog was created by the current user
 
     await Blog.findByIdAndDelete(request.params.id)
+
+    logger.info(
+        `User '${user.username}' deleted blog with id ${request.params.id}`
+    )
+
     response.status(204).end()
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-    const tokenFromRequest = getTokenFromClientRequest(request)
-    const decodedToken = jwt.verify(tokenFromRequest, process.env.SECRET)
-
-    if (!decodedToken.id) {
-        // if the token does not contain the user's identity (decodedToken.id is undefined)
-        return response.status(401).json({ error: 'invalid token' })
-    }
-
-    const user = await User.findById(decodedToken.id)
-
-    if (!user) {
-        return response.status(400).json({ error: 'userId missing or invalid' })
-    }
+    const user = await getAndCheckUser(request, response)
 
     if (!request.body.title) {
         return response.status(400).json({ error: '"title" field is missing' })
@@ -141,6 +128,27 @@ blogsRouter.put('/:id', async (request, response) => {
         `User '${user.username}' updated blog [id: '${updatedBlog.id}', title '${updatedBlog.title}', created by: ${updatedBlog.user.username}]`
     )
     response.json(updatedBlog)
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+    const comment = request.body.content
+    const user = await getAndCheckUser(request, response)
+
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+        return response
+            .status(404)
+            .json({ error: `blog with id=${request.params.id} not found` })
+    }
+
+    blog.comments.push(comment)
+    const savedBlog = await blog.save()
+
+    logger.info(
+        `User '${user.username}' added comment ${comment} to blog [id: '${blog.id}', title '${blog.title}', created by: ${blog.user.username}]`
+    )
+
+    response.json(savedBlog)
 })
 
 module.exports = blogsRouter

@@ -24,7 +24,7 @@ Content-Type: application/json
 GET http://localhost:3001/api/blogs
 
 ### Get a specific blog
-GET http://localhost:3001/api/blogs/692427882fb75ee73415225a
+GET http://localhost:3001/api/blogs/698d91654901164f5683b96a
 
 ### Delete a specific blog
 DELETE http://localhost:3001/api/blogs/692727d908d74a1c04ae9864
@@ -39,4 +39,13 @@ Content-Type: application/json
     "author": "somebody else than Dijkstra",
     "url": "http://url.io",
     "likes": 53
+}
+
+### Add a comment to a specific blog
+POST http://localhost:3001/api/blogs/698d91654901164f5683b96a/comments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNvbWVvbmUiLCJpZCI6IjY5MjcyNzVkMDhkNzRhMWMwNGFlOTg1NiIsImlhdCI6MTc3MDkwMzQ5OCwiZXhwIjoxNzcwOTA3MDk4fQ.CQ1_-YYTIruBBB7YfhoMHw8Y6HyhSM2dc77UaF39TJs
+
+{
+    "content": "this is another comment"
 }
