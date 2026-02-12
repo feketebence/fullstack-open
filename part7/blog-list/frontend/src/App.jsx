@@ -16,6 +16,7 @@ import Home from './pages/Home'
 import Users from './pages/Users'
 import User from './pages/User'
 import NotFound from './pages/NotFound'
+import Blog from './pages/Blog'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -65,6 +66,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/users/:id" element={<User />} />
+                <Route path="/blogs/:id" element={<Blog />} />
                 <Route path="/*" element={<NotFound />} />
             </Routes>
         </>

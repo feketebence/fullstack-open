@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux'
-
-import Blog from './Blog'
+import { useNavigate } from 'react-router-dom'
 
 const BlogList = () => {
     const blogs = useSelector((state) => state.blogs)
-    const currentUser = useSelector((state) => state.currentUser)
+    const navigate = useNavigate()
 
     if (blogs.length === 0) {
         return <>There are no blog entries.</>
@@ -12,13 +11,20 @@ const BlogList = () => {
 
     return (
         <>
-            {blogs
-                .slice()
-                .sort((a, b) => a.likes - b.likes)
-                .reverse()
-                .map((blog) => (
-                    <Blog key={blog.id} blog={blog} user={currentUser} />
-                ))}
+            <ul>
+                {blogs
+                    .slice()
+                    .sort((a, b) => a.likes - b.likes)
+                    .reverse()
+                    .map((blog) => (
+                        <li
+                            key={blog.id}
+                            onClick={() => navigate(`/blogs/${blog.id}`)}
+                        >
+                            {blog.title} - {blog.author}
+                        </li>
+                    ))}
+            </ul>
         </>
     )
 }
