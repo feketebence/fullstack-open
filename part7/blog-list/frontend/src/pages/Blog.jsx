@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { increaseBlogLikes, removeBlog } from '../reducers/blogReducer'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import Comments from '../components/Comments'
 
 const Blog = () => {
     const dispatch = useDispatch()
@@ -47,6 +48,7 @@ const Blog = () => {
                 {currentUser.username === blog.user.username && (
                     <button onClick={handleRemoveClick}>remove</button>
                 )}
+                <Comments comments={blog.comments} />
             </>
         </div>
     )

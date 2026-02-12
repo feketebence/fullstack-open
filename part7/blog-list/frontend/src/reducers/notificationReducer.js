@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { generateId } from '../utils'
 
 const initialState = []
-
-const generateId = () => Math.floor(Math.random() * 1_000_000)
 
 const notificationsSlice = createSlice({
     name: 'notifications',
@@ -11,7 +10,7 @@ const notificationsSlice = createSlice({
         addNotification(state, action) {
             const content = action.payload.notificationText
             const type = action.payload.notificationType
-            const id = generateId()
+            const id = generateId
 
             state.push({
                 id,
@@ -22,7 +21,7 @@ const notificationsSlice = createSlice({
         removeNotification(state) {
             state.shift()
         }
-        // NOTE: we can use mutative array methods (like `.push(...)` and `.shift()`)
+        // NOTE: we can use mutative array methods (like `.push(...)` and `.shift()`). Or can we??
     }
 })
 
