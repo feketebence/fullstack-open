@@ -17,11 +17,15 @@ import Users from './pages/Users'
 import User from './pages/User'
 import NotFound from './pages/NotFound'
 import Blog from './pages/Blog'
+import NavigationMenu from './components/NavigationMenu'
 
 const App = () => {
     const dispatch = useDispatch()
-
     const currentUser = useSelector((state) => state.currentUser)
+
+    const style = {
+        backgroundColor: '#cececeff'
+    }
 
     useEffect(() => {
         if (currentUser) {
@@ -53,12 +57,11 @@ const App = () => {
 
     return (
         <>
-            <div>
-                <h2>blogs</h2>
-                <Notification />
-
-                <p>{currentUser.name} is logged in</p>
+            <div style={style}>
+                <NavigationMenu />
+                {currentUser.name} is logged in{' '}
                 <button onClick={handleLogout}>log out</button>
+                <Notification />
                 <hr />
             </div>
 
