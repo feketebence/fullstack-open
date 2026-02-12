@@ -14,7 +14,7 @@ const blogSlice = createSlice({
             const deletedBlog = action.payload
             return state.filter((blog) => blog.id !== deletedBlog.id)
         },
-        likeBlog(state, action) {
+        updateBlog(state, action) {
             const changedBlog = action.payload
 
             return state.map((blog) =>
@@ -27,7 +27,7 @@ const blogSlice = createSlice({
     }
 })
 
-const { createBlog, deleteBlog, likeBlog, setBlogs } = blogSlice.actions
+const { createBlog, deleteBlog, updateBlog, setBlogs } = blogSlice.actions
 
 export const appendBlog = (blog) => {
     return async (dispatch) => {
@@ -44,6 +44,26 @@ export const appendBlog = (blog) => {
             dispatch(
                 setNotification(
                     `Error occurred during creation of blog "${blog.title} - ${blog.author}".`,
+                    'error'
+                )
+            )
+        }
+    }
+}
+
+export const appendComment = (blogId, comment) => {
+    return async (dispatch) => {
+        try {
+            const blogWithComment = await blogService.addComment(
+                blogId,
+                comment
+            )
+            dispatch(updateBlog(blogWithComment))
+            dispatch(setNotification(`Added comment "${comment}"`, 'success'))
+        } catch {
+            dispatch(
+                setNotification(
+                    `Error occurred during adding comment "${comment}".`,
                     'error'
                 )
             )
@@ -77,7 +97,7 @@ export const increaseBlogLikes = (blog) => {
     return async (dispatch) => {
         try {
             const updatedBlog = await blogService.increaseLikes(blog.id)
-            dispatch(likeBlog(updatedBlog))
+            dispatch(updateBlog(updatedBlog))
             dispatch(
                 setNotification(
                     `Blog "${blog.title} - ${blog.author}" liked!`,

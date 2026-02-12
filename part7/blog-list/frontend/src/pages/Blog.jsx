@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { increaseBlogLikes, removeBlog } from '../reducers/blogReducer'
 import Comments from '../components/Comments'
+import CommentForm from '../components/CommentForm'
 
 const Blog = () => {
     const dispatch = useDispatch()
@@ -49,6 +50,7 @@ const Blog = () => {
                     <button onClick={handleRemoveClick}>remove</button>
                 )}
                 <Comments comments={blog.comments} />
+                <CommentForm blog={blog} />
             </>
         </div>
     )

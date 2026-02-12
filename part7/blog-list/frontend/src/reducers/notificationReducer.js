@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import { generateId } from '../utils'
 
 const initialState = []
@@ -10,7 +11,7 @@ const notificationsSlice = createSlice({
         addNotification(state, action) {
             const content = action.payload.notificationText
             const type = action.payload.notificationType
-            const id = generateId
+            const id = generateId()
 
             state.push({
                 id,

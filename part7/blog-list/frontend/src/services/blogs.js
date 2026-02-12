@@ -55,6 +55,29 @@ const increaseLikes = async (id) => {
     return updateResponse.data
 }
 
+const addComment = async (blogId, comment) => {
+    const config = {
+        headers: { Authorization: token }
+    }
+
+    const response = await axios.get(`${baseUrl}/${blogId}`)
+    if (!response.status === 200) {
+        throw new Error(`Failed to fetch blog with id: ${blogId}`)
+    }
+
+    const commentToPost = {
+        content: comment
+    }
+
+    const postResponse = await axios.post(
+        `${baseUrl}/${blogId}/comments`,
+        commentToPost,
+        config
+    )
+
+    return postResponse.data
+}
+
 const deleteBlog = async (blogToDelete) => {
     const config = {
         headers: { Authorization: token }
@@ -64,4 +87,12 @@ const deleteBlog = async (blogToDelete) => {
     return response.data
 }
 
-export default { getAll, create, update, increaseLikes, deleteBlog, setToken }
+export default {
+    getAll,
+    create,
+    update,
+    increaseLikes,
+    addComment,
+    deleteBlog,
+    setToken
+}
