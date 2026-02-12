@@ -1,20 +1,21 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import blogService from './services/blogs'
 import localStorage from './services/localStorage'
 
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import BlogForm from './components/BlogForm'
-import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { setCurrentUser, unsetCurrentUser } from './reducers/currentUserReducer'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import Users from './pages/Users'
+import { initializeUsers } from './reducers/userReducer'
 
 const App = () => {
-    const blogFormRef = useRef()
     const dispatch = useDispatch()
 
     const currentUser = useSelector((state) => state.currentUser)
@@ -22,6 +23,7 @@ const App = () => {
     useEffect(() => {
         if (currentUser) {
             dispatch(initializeBlogs())
+            dispatch(initializeUsers())
         }
     }, [currentUser, dispatch])
 
@@ -47,23 +49,22 @@ const App = () => {
     }
 
     return (
-        <div>
-            <h2>blogs</h2>
-            <p>{currentUser.name} is logged in</p>
-            <button onClick={handleLogout}>log out</button>
-            <Notification />
-            <br />
-            <hr />
-            <Togglable
-                revealButtonLabel="show blog creation form"
-                hideButtonLabel="close blog creation form"
-                ref={blogFormRef}
-            >
-                <BlogForm />
-            </Togglable>
-            <br />
-            <BlogList user={currentUser} />
-        </div>
+        <>
+            <div>
+                <h2>blogs</h2>
+                <Notification />
+
+                <p>{currentUser.name} is logged in</p>
+                <button onClick={handleLogout}>log out</button>
+                <hr />
+            </div>
+
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/*" element={<NotFound />} />
+            </Routes>
+        </>
     )
 }
 

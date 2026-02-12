@@ -71,7 +71,6 @@ const BlogForm = () => {
                 </div>
                 <button type="submit">add new blog</button>
             </form>
-            <hr />
         </div>
     )
 }
