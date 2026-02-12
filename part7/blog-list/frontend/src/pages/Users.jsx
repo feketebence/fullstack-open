@@ -1,7 +1,9 @@
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const Users = () => {
     const users = useSelector((state) => state.users)
+    const navigate = useNavigate()
 
     return (
         <>
@@ -16,7 +18,10 @@ const Users = () => {
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user.id}>
+                        <tr
+                            key={user.id}
+                            onClick={() => navigate(`/users/${user.id}`)}
+                        >
                             <td>
                                 {user.username} - {user.name}
                             </td>

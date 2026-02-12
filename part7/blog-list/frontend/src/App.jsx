@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Route, Routes } from 'react-router-dom'
 
 import blogService from './services/blogs'
 import localStorage from './services/localStorage'
@@ -8,12 +9,13 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 
 import { initializeBlogs } from './reducers/blogReducer'
-import { setCurrentUser, unsetCurrentUser } from './reducers/currentUserReducer'
-import { Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import NotFound from './pages/NotFound'
-import Users from './pages/Users'
 import { initializeUsers } from './reducers/userReducer'
+import { setCurrentUser, unsetCurrentUser } from './reducers/currentUserReducer'
+
+import Home from './pages/Home'
+import Users from './pages/Users'
+import User from './pages/User'
+import NotFound from './pages/NotFound'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -62,6 +64,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/users" element={<Users />} />
+                <Route path="/users/:id" element={<User />} />
                 <Route path="/*" element={<NotFound />} />
             </Routes>
         </>
