@@ -34,7 +34,7 @@ const Users = () => {
                     <TableHead>
                         <TableRow
                             sx={{
-                                backgroundColor: '#b9b9b9ff',
+                                backgroundColor: '#b5e0ffff',
                                 '& th': {
                                     color: '#222222ff',
                                     fontWeight: 'bold'

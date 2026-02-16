@@ -21,7 +21,7 @@ const Notification = () => {
                             ? 'success'
                             : 'error'
                     }
-                    variant="outlined"
+                    variant="filled"
                     sx={{ width: '100%' }}
                 >
                     {lastNotification.content}

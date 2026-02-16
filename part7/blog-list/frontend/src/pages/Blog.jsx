@@ -43,8 +43,12 @@ const Blog = () => {
     }
 
     return (
-        <Container sx={{ marginTop: 4, maxWidth: 800 }}>
-            <Card className="blog" id={blog.id}>
+        <>
+            <Card
+                className="blog"
+                id={blog.id}
+                sx={{ marginTop: 4, maxWidth: 800 }}
+            >
                 <CardContent>
                     <Typography
                         gutterBottom
@@ -89,7 +93,7 @@ const Blog = () => {
                     )}
                 </CardActions>
             </Card>
-        </Container>
+        </>
     )
 }
 

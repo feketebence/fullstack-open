@@ -18,6 +18,7 @@ import NotFound from './pages/NotFound'
 import Blog from './pages/Blog'
 import NavigationMenu from './components/NavigationMenu'
 import Notification from './components/Notification'
+import { Container } from '@mui/material'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -50,13 +51,15 @@ const App = () => {
             </div>
             <Notification />
 
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/users/:id" element={<User />} />
-                <Route path="/blogs/:id" element={<Blog />} />
-                <Route path="/*" element={<NotFound />} />
-            </Routes>
+            <Container sx={{ marginTop: 3 }}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/users" element={<Users />} />
+                    <Route path="/users/:id" element={<User />} />
+                    <Route path="/blogs/:id" element={<Blog />} />
+                    <Route path="/*" element={<NotFound />} />
+                </Routes>
+            </Container>
         </>
     )
 }

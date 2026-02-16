@@ -11,19 +11,19 @@ const Comments = ({ comments }) => {
             <Typography>Comments ({comments.length}):</Typography>
             <List>
                 {comments.map((comment, index) => (
-                    <>
+                    <div key={generateId()}>
                         <ListItem
+                            key={generateId()}
                             sx={{
                                 '&:hover': {
                                     backgroundColor: '#b5e0ffff'
                                 }
                             }}
-                            key={generateId()}
                         >
                             <Typography>{comment}</Typography>
                         </ListItem>
                         {index !== comments.length - 1 ? <Divider /> : null}
-                    </>
+                    </div>
                 ))}
             </List>
         </>
