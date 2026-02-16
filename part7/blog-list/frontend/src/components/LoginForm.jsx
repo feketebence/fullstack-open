@@ -2,6 +2,14 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { login } from '../reducers/currentUserReducer'
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    TextField,
+    Typography
+} from '@mui/material'
 import Notification from './Notification'
 
 const LoginForm = () => {
@@ -16,34 +24,49 @@ const LoginForm = () => {
     }
 
     return (
-        <div className="container">
-            <h2>Login</h2>
-            <Notification />
+        <Card variant="outlined" sx={{ maxWidth: 600, marginTop: 3 }}>
+            <CardContent>
+                <Notification />
+                <Typography variant="h6">Login</Typography>
 
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>
-                        username user
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={({ target }) => setUsername(target.value)}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        password{' '}
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={({ target }) => setPassword(target.value)}
-                        />
-                    </label>
-                </div>
-                <button type="submit">login</button>
-            </form>
-        </div>
+                <Box
+                    component="form"
+                    onSubmit={handleLogin}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}
+                >
+                    <TextField
+                        label="username"
+                        name="username"
+                        placeholder="here goes your username"
+                        required
+                        variant="outlined"
+                        value={username}
+                        onChange={(event) => {
+                            setUsername(event.target.value)
+                        }}
+                    />
+                    <TextField
+                        label="password"
+                        name="password"
+                        type="password"
+                        placeholder="here goes your password"
+                        required
+                        variant="outlined"
+                        value={password}
+                        onChange={(event) => {
+                            setPassword(event.target.value)
+                        }}
+                    />
+                    <Button type="submit" variant="contained">
+                        login
+                    </Button>
+                </Box>
+            </CardContent>
+        </Card>
     )
 }
 
