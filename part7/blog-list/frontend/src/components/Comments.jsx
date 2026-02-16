@@ -10,7 +10,7 @@ const Comments = ({ comments }) => {
         <>
             <Typography>Comments ({comments.length}):</Typography>
             <List>
-                {comments.map((comment) => (
+                {comments.map((comment, index) => (
                     <>
                         <ListItem
                             sx={{
@@ -20,9 +20,9 @@ const Comments = ({ comments }) => {
                             }}
                             key={generateId()}
                         >
-                            {comment}
+                            <Typography>{comment}</Typography>
                         </ListItem>
-                        <Divider />
+                        {index !== comments.length - 1 ? <Divider /> : null}
                     </>
                 ))}
             </List>
