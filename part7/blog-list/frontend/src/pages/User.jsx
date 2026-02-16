@@ -1,26 +1,46 @@
+import { Container, List, ListItem, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const User = () => {
     const { id } = useParams()
     const user = useSelector((state) =>
         state.users.find((user) => user.id === id)
     )
+    const navigate = useNavigate()
 
     if (!user) {
         return null
     }
 
     return (
-        <>
-            <h2>{user.name}</h2>
-            <h3>added blogs</h3>
-            <ul>
+        <Container
+            sx={{
+                marginTop: 3,
+                width: '100%',
+                maxWidth: 1000,
+                bgcolor: 'background.paper'
+            }}
+        >
+            <Typography variant="h4">Blogs added by {user.name}:</Typography>
+            <List>
                 {user.blogs.map((blog) => (
-                    <li key={blog.id}> {blog.title} </li>
+                    <ListItem
+                        key={blog.id}
+                        sx={{
+                            fontSize: 20,
+                            cursor: 'pointer',
+                            '&:hover': {
+                                backgroundColor: '#8dcbffff'
+                            }
+                        }}
+                        onClick={() => navigate(`/blogs/${blog.id}`)}
+                    >
+                        {blog.title} - {blog.author}
+                    </ListItem>
                 ))}
-            </ul>
-        </>
+            </List>
+        </Container>
     )
 }
 

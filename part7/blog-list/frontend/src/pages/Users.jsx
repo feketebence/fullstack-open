@@ -17,7 +17,14 @@ const Users = () => {
     const navigate = useNavigate()
 
     return (
-        <Container>
+        <Container
+            sx={{
+                marginTop: 3,
+                width: '100%',
+                maxWidth: 1000,
+                bgcolor: 'background.paper'
+            }}
+        >
             <Typography variant="h4">Users</Typography>
             <TableContainer
                 component={Paper}

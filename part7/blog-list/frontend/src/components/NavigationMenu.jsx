@@ -161,7 +161,9 @@ const NavigationMenu = ({ currentUser }) => {
                         ))}
                     </Box>
 
-                    <Typography>{currentUser.name} is logged in</Typography>
+                    <Typography sx={{ marginRight: 4 }}>
+                        {currentUser.name} is logged in
+                    </Typography>
                     <LogoutIcon></LogoutIcon>
                     <Button color="inherit" onClick={handleLogout}>
                         Logout
