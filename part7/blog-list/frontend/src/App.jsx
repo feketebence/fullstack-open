@@ -23,10 +23,6 @@ const App = () => {
     const dispatch = useDispatch()
     const currentUser = useSelector((state) => state.currentUser)
 
-    const style = {
-        backgroundColor: '#cececeff'
-    }
-
     useEffect(() => {
         if (currentUser) {
             dispatch(initializeBlogs())
@@ -49,10 +45,10 @@ const App = () => {
 
     return (
         <>
-            <div style={style}>
+            <div>
                 <NavigationMenu currentUser={currentUser} />
-                <Notification />
             </div>
+            <Notification />
 
             <Routes>
                 <Route path="/" element={<Home />} />

@@ -1,27 +1,33 @@
 import { useSelector } from 'react-redux'
+import { Alert, Snackbar } from '@mui/material'
 
 const Notification = () => {
-    const style = {
-        border: 'solid',
-        padding: 10,
-        borderWidth: 1,
-        marginBottom: 10
-    }
     const notifications = useSelector((state) => state.notifications)
+    const lastNotification = notifications[notifications.length - 1]
 
     if (notifications.length === 0) {
         return null
     }
 
     return (
-        <div>
-            {notifications.map((notification) => (
-                <div style={style} key={notification.id}>
-                    {notification.type === 'success' ? '✅' : '❌'}
-                    {notification.content}
-                </div>
-            ))}
-        </div>
+        <>
+            <Snackbar
+                open={lastNotification ? true : false}
+                autoHideDuration={5000}
+            >
+                <Alert
+                    severity={
+                        lastNotification.type === 'success'
+                            ? 'success'
+                            : 'error'
+                    }
+                    variant="outlined"
+                    sx={{ width: '100%' }}
+                >
+                    {lastNotification.content}
+                </Alert>
+            </Snackbar>
+        </>
     )
 }
 
