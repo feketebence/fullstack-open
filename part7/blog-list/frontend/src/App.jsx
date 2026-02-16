@@ -5,12 +5,11 @@ import { Route, Routes } from 'react-router-dom'
 import blogService from './services/blogs'
 import localStorage from './services/localStorage'
 
-import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/userReducer'
-import { setCurrentUser, unsetCurrentUser } from './reducers/currentUserReducer'
+import { setCurrentUser } from './reducers/currentUserReducer'
 
 import Home from './pages/Home'
 import Users from './pages/Users'
@@ -18,6 +17,7 @@ import User from './pages/User'
 import NotFound from './pages/NotFound'
 import Blog from './pages/Blog'
 import NavigationMenu from './components/NavigationMenu'
+import Notification from './components/Notification'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -43,14 +43,6 @@ const App = () => {
         }
     }, [dispatch])
 
-    const handleLogout = (event) => {
-        event.preventDefault()
-
-        localStorage.removeCurrentUser()
-        blogService.setToken(null)
-        dispatch(unsetCurrentUser())
-    }
-
     if (currentUser === null) {
         return <LoginForm />
     }
@@ -58,11 +50,8 @@ const App = () => {
     return (
         <>
             <div style={style}>
-                <NavigationMenu />
-                {currentUser.name} is logged in{' '}
-                <button onClick={handleLogout}>log out</button>
+                <NavigationMenu currentUser={currentUser} />
                 <Notification />
-                <hr />
             </div>
 
             <Routes>
