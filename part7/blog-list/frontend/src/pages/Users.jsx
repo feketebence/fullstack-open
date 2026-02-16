@@ -1,3 +1,14 @@
+import {
+    Container,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -6,31 +17,50 @@ const Users = () => {
     const navigate = useNavigate()
 
     return (
-        <>
-            <h1>Users</h1>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">User</th>
-                        <th scope="row">Created blogs</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((user) => (
-                        <tr
-                            key={user.id}
-                            onClick={() => navigate(`/users/${user.id}`)}
+        <Container>
+            <Typography variant="h4">Users</Typography>
+            <TableContainer
+                component={Paper}
+                sx={{ minWidth: 300, maxWidth: 600 }}
+            >
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow
+                            sx={{
+                                backgroundColor: '#b9b9b9ff',
+                                '& th': {
+                                    color: '#222222ff',
+                                    fontWeight: 'bold'
+                                }
+                            }}
                         >
-                            <td>
-                                {user.username} - {user.name}
-                            </td>
-                            <td>{user.blogs.length}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
+                            <TableCell>User</TableCell>
+                            <TableCell>created blogs</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {users.map((user) => (
+                            <TableRow
+                                hover
+                                key={user.id}
+                                sx={{
+                                    cursor: 'pointer',
+                                    '&:last-child td, &:last-child th': {
+                                        border: 0
+                                    }
+                                }}
+                                onClick={() => navigate(`/users/${user.id}`)}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {user.username} - {user.name}
+                                </TableCell>
+                                <TableCell>{user.blogs.length}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Container>
     )
 }
 
