@@ -1,3 +1,4 @@
+import { Divider, List, ListItem, Typography } from '@mui/material'
 import { generateId } from '../utils'
 
 const Comments = ({ comments }) => {
@@ -7,12 +8,24 @@ const Comments = ({ comments }) => {
 
     return (
         <>
-            <p>comments:</p>
-            <ul>
+            <Typography>Comments ({comments.length}):</Typography>
+            <List>
                 {comments.map((comment) => (
-                    <li key={generateId()}>{comment}</li>
+                    <>
+                        <ListItem
+                            sx={{
+                                '&:hover': {
+                                    backgroundColor: '#b5e0ffff'
+                                }
+                            }}
+                            key={generateId()}
+                        >
+                            {comment}
+                        </ListItem>
+                        <Divider />
+                    </>
                 ))}
-            </ul>
+            </List>
         </>
     )
 }

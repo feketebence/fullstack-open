@@ -4,6 +4,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { increaseBlogLikes, removeBlog } from '../reducers/blogReducer'
 import Comments from '../components/Comments'
 import CommentForm from '../components/CommentForm'
+import {
+    Button,
+    Box,
+    Card,
+    CardActions,
+    CardContent,
+    Container,
+    Typography
+} from '@mui/material'
 
 const Blog = () => {
     const dispatch = useDispatch()
@@ -34,25 +43,53 @@ const Blog = () => {
     }
 
     return (
-        <div className="blog" id={blog.id}>
-            {blog.title} - {blog.author}{' '}
-            <>
-                <br />
-                <a href={blog.url} target="_blank">
-                    {blog.url}
-                </a>
-                <p>
-                    likes {blog.likes}{' '}
-                    <button onClick={handleLikeClick}>like</button>
-                </p>
-                <p>Added by: {blog.user.name}</p>
-                {currentUser.username === blog.user.username && (
-                    <button onClick={handleRemoveClick}>remove</button>
-                )}
-                <Comments comments={blog.comments} />
-                <CommentForm blog={blog} />
-            </>
-        </div>
+        <Container sx={{ marginTop: 4, maxWidth: 800 }}>
+            <Card className="blog" id={blog.id}>
+                <CardContent>
+                    <Typography
+                        gutterBottom
+                        sx={{ color: 'text.primary', fontSize: 20 }}
+                    >
+                        {blog.title} - {blog.author}
+                    </Typography>
+
+                    <a href={blog.url} target="_blank">
+                        <Typography>{blog.url}</Typography>
+                    </a>
+                    <br />
+                    <br />
+
+                    <Typography>Added by: {blog.user.name}</Typography>
+
+                    <Box
+                        sx={{
+                            margin: 2,
+                            padding: 1,
+                            border: 2,
+                            borderColor: '#b5e0ffff',
+                            borderBlockStyle: 'solid',
+                            borderRadius: 2
+                        }}
+                    >
+                        <Comments comments={blog.comments} />
+                        <CommentForm blog={blog} />
+                    </Box>
+                </CardContent>
+                <CardActions>
+                    <Typography>
+                        likes {blog.likes}{' '}
+                        <Button variant="outlined" onClick={handleLikeClick}>
+                            like
+                        </Button>
+                    </Typography>
+                    {currentUser.username === blog.user.username && (
+                        <Button variant="contained" onClick={handleRemoveClick}>
+                            remove
+                        </Button>
+                    )}
+                </CardActions>
+            </Card>
+        </Container>
     )
 }
 
