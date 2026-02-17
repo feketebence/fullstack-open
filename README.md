@@ -4,13 +4,15 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part8/graph_ql_server
+Currently at: https://fullstackopen.com/en/part9/background_and_introduction
 
 todo:
 
-- bug-fixing in part7 [blog-list app](./part7//blog-list/frontend/)
+- bug-fixing in [part7/blog-list app](./part7//blog-list/frontend/)
 
-- implement part7/blog-list app with React Query and Context
+- implement [part7/blog-list app](./part7//blog-list/frontend/) with React Query and Context
+
+- [part8 - GraphQL](https://fullstackopen.com/en/part8)
 
 - [Exercises 2-18, 2-19 and 2-20](https://fullstackopen.com/en/part2/adding_styles_to_react_app#exercises-2-18-2-20)
 
