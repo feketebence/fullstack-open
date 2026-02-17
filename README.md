@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part9/background_and_introduction
+Currently at: https://fullstackopen.com/en/part9/first_steps_with_type_script#exercises-9-1-9-3
 
 todo:
 
