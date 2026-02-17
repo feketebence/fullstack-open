@@ -1,3 +1,8 @@
+interface TrainingInputs {
+    dailyTarget: number
+    hours: number[]
+}
+
 interface Result {
     periodLength: number
     trainingDays: number
@@ -6,6 +11,30 @@ interface Result {
     ratingDescription: string
     target: number
     average: number
+}
+
+const parseTrainingArguments = (args: string[]): TrainingInputs => {
+    if (args.length < 4)
+        throw new Error(
+            'Not enough arguments, the dailyTarget and at least one dailyHour value is needed.'
+        )
+
+    if (isNaN(Number(args[2]))) {
+        throw new Error('Daily target (first arg) is not a number.')
+    }
+
+    for (let i = 3; i < args.length; i++) {
+        if (isNaN(Number(args[i]))) {
+            throw new Error(
+                `The number of training hours '${args[i]}' for day ${i - 2} (args[${i}]) is not a number.`
+            )
+        }
+    }
+
+    return {
+        dailyTarget: Number(args[2]),
+        hours: args.slice(3).map((value) => Number(value))
+    }
 }
 
 const calculateExercises = (
@@ -59,4 +88,14 @@ const calculateExercises = (
     }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+    const { dailyTarget, hours } = parseTrainingArguments(process.argv)
+
+    console.log(calculateExercises(hours, dailyTarget))
+} catch (error: unknown) {
+    let errorMessage = 'An error occurred.'
+    if (error instanceof Error) {
+        errorMessage += ' ' + error.message
+    }
+    console.log(errorMessage)
+}
