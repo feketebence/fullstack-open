@@ -1,20 +1,21 @@
 {
-  "name": "exercises",
-  "version": "1.0.0",
-  "description": "",
-  "keywords": [
-    "typescript",
-    "fullstackopen"
-  ],
-  "license": "ISC",
-  "author": "feketebence",
-  "type": "commonjs",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
-  }
+    "name": "exercises",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [
+        "typescript",
+        "fullstackopen"
+    ],
+    "license": "ISC",
+    "author": "feketebence",
+    "type": "commonjs",
+    "main": "index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "calculateBmi": "ts-node bmiCalculator.ts"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    }
 }
