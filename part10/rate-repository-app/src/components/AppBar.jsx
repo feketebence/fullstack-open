@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        backgroundColor: theme.colors.dark
+        backgroundColor: theme.colors.appBar
     }
 })
 

@@ -4,19 +4,19 @@ import theme from '../theme'
 
 const styles = StyleSheet.create({
     text: {
-        color: theme.colors.textPrimary,
+        color: theme.colors.text.primary,
         fontSize: theme.fontSizes.body,
         fontFamily: theme.fonts.main,
         fontWeight: theme.fontWeights.normal
     },
     colorTextSecondary: {
-        color: theme.colors.textSecondary
+        color: theme.colors.text.secondary
     },
     colorPrimary: {
         color: theme.colors.primary
     },
     colorLight: {
-        color: theme.colors.textLight
+        color: theme.colors.text.light
     },
     fontSizeHeading: {
         fontSize: theme.fontSizes.heading
