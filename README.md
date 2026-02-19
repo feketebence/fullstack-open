@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part10/introduction_to_react_native
+Currently at: https://fullstackopen.com/en/part10/react_native_basics#consistent-user-interface-with-theming
 
 ### Skipped parts
 
