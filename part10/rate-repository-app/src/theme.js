@@ -3,11 +3,16 @@ const theme = {
         text: {
             primary: '#24292e',
             secondary: '#586069',
-            light: '#e0e0e0ff'
+            light: '#e0e0e0ff',
+            white: '#fff'
         },
         primary: '#0366d6',
         dark: '#222',
-        appBar: '#1f1f1fff'
+        background: '#dbdbdbff',
+        appBar: '#1f1f1fff',
+        repositoryCard: {
+            background: '#ffffffff'
+        }
     },
     fontSizes: {
         body: 14,
@@ -20,6 +25,12 @@ const theme = {
     fontWeights: {
         normal: '400',
         bold: '700'
+    },
+    imageSizes: {
+        avatar: 60
+    },
+    imageBorder: {
+        borderRadius: 8
     }
 }
 
