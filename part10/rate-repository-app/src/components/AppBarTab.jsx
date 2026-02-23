@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import Text from './Text'
+import { useNavigate } from 'react-router-native'
 
 const styles = StyleSheet.create({
     container: {
@@ -8,14 +9,12 @@ const styles = StyleSheet.create({
     }
 })
 
-const handlePress = (children) => {
-    console.log(`${children} tab pressed`)
-}
+const AppBarTab = ({ children, to }) => {
+    const navigate = useNavigate()
 
-const AppBarTab = ({ children }) => {
     return (
         <View style={styles.container}>
-            <Pressable onPress={() => handlePress(children)}>
+            <Pressable onPress={() => navigate(to)}>
                 <Text fontSize="heading" color="light">
                     {children}
                 </Text>
