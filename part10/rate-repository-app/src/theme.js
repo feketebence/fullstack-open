@@ -8,7 +8,9 @@ const theme = {
         },
         primary: '#0366d6',
         dark: '#222',
+        light: '#5e5e5eff',
         background: '#dbdbdbff',
+        panelBackground: '#fff',
         appBar: '#1f1f1fff',
         repositoryCard: {
             background: '#ffffffff'
