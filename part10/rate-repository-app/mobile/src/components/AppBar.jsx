@@ -6,7 +6,7 @@ import AppBarTab from './AppBarTab'
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: Constants.statusBarHeight,
+        paddingTop: Constants.statusBarHeight + 20,
         paddingBottom: 20,
         flexDirection: 'row',
         flexWrap: 'wrap',
