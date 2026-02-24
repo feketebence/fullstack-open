@@ -4,7 +4,7 @@ Sandbox for <a href="https://fullstackopen.com/en/" target="_blank" rel="noopene
 
 ## Progress
 
-Currently at: https://fullstackopen.com/en/part10/react_native_basics#consistent-user-interface-with-theming
+Currently at: https://fullstackopen.com/en/part10/communicating_with_server
 
 ### Skipped parts
 
