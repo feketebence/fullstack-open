@@ -4,6 +4,7 @@ import { object, string } from 'yup'
 
 import Text from './Text'
 import theme from '../theme'
+import useSignIn from '../hooks/useSignIn'
 
 const initialValues = {
     username: '',
@@ -47,10 +48,19 @@ const styles = StyleSheet.create({
 })
 
 const SignInForm = () => {
-    const onSubmit = (values) => {
+    const [signIn] = useSignIn()
+
+    const onSubmit = async (values) => {
         console.log(
             `User attempted login with username '${values.username}' and password '${values.password}'`
         )
+        const { username, password } = values
+
+        try {
+            const { data } = await signIn({ username, password })
+        } catch (e) {
+            console.log('error during signIn:', e)
+        }
     }
 
     const formik = useFormik({
