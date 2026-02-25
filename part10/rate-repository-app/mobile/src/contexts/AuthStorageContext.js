@@ -1,5 +1,5 @@
 import { createContext } from 'react'
 
-const AuthStorageContext = createContext(null)
+const AuthStorageContext = createContext()
 
 export default AuthStorageContext

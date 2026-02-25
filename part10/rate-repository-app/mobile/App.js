@@ -4,10 +4,14 @@ import Constants from 'expo-constants'
 import Main from './src/components/Main'
 import createApolloClient from './src/utils/apolloClient'
 import { ApolloProvider } from '@apollo/client'
-
-const apolloClient = createApolloClient()
+import AuthStorage from './src/utils/authStorage'
+import AuthStorageContext from './src/contexts/AuthStorageContext'
 
 console.log(`Running the app in ${Constants.expoConfig.extra.env} mode.`)
+console.log(`Using apollo_uri: ${Constants.expoConfig.extra.apollo_uri}`)
+
+const authStorage = new AuthStorage()
+const apolloClient = createApolloClient(authStorage)
 
 const App = () => {
     return (
@@ -15,7 +19,9 @@ const App = () => {
             future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
         >
             <ApolloProvider client={apolloClient}>
-                <Main />
+                <AuthStorageContext.Provider value={authStorage}>
+                    <Main />
+                </AuthStorageContext.Provider>
             </ApolloProvider>
         </NativeRouter>
     )

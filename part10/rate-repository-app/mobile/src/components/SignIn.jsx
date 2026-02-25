@@ -5,6 +5,7 @@ import { object, string } from 'yup'
 import Text from './Text'
 import theme from '../theme'
 import useSignIn from '../hooks/useSignIn'
+import useAuthStorage from '../hooks/useAuthStorage' // needed only for debugging
 
 const initialValues = {
     username: '',
@@ -49,18 +50,29 @@ const styles = StyleSheet.create({
 
 const SignInForm = () => {
     const [signIn] = useSignIn()
+    const authStorage = useAuthStorage() // needed only for debugging
 
     const onSubmit = async (values) => {
         console.log(
-            `User attempted login with username '${values.username}' and password '${values.password}'`
+            `Attempting login with username '${values.username}' and password '${values.password}'`
         )
         const { username, password } = values
 
         try {
             const { data } = await signIn({ username, password })
+            console.log(
+                'Successful login, accessToken:',
+                data.authenticate.accessToken
+            )
         } catch (e) {
-            console.log('error during signIn:', e)
+            console.log('Error during login:', e)
         }
+    }
+
+    // needed only for debugging
+    const logAuthStorage = async () => {
+        const authStorageToken = await authStorage.getAccessToken()
+        console.log('AuthStorage[auth:accessToken]:', authStorageToken)
     }
 
     const formik = useFormik({
@@ -112,6 +124,13 @@ const SignInForm = () => {
             >
                 <Text fontSize="subheading" fontWeight="bold" color="light">
                     Sign in
+                </Text>
+            </Pressable>
+
+            {/* // needed only for debugging */}
+            <Pressable style={styles.submitButton} onPress={logAuthStorage}>
+                <Text fontSize="subheading" fontWeight="bold" color="light">
+                    Log AuthStorage[auth:accessToken] to console
                 </Text>
             </Pressable>
         </View>
